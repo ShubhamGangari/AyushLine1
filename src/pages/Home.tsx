@@ -97,36 +97,109 @@ const Home = () => {
 
         <motion.div 
           initial="hidden" animate="visible" variants={fadeInUp}
-          className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full"
+          className="relative z-10 max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12 w-full py-12 lg:py-20"
         >
-          <div className="max-w-3xl">
-            <h1 className="text-5xl md:text-7xl font-display font-bold text-ayush-forest leading-tight mb-6">
-              Ancient Wisdom.<br />
-              <span className="text-ayush-gold">Modern Knowledge.</span><br />
-              One Platform.
-            </h1>
-            <p className="text-xl md:text-2xl text-ayush-charcoal/80 font-body mb-10 max-w-2xl">
-              A unified AYUSH community for practitioners, students, and institutions globally.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link to="/join">
-                <Button variant="primary" className="w-full sm:w-auto text-lg px-8 py-4">Register Now</Button>
-              </Link>
-              <a href="#explore">
-                <Button variant="secondary" className="w-full sm:w-auto text-lg px-8 py-4 bg-white/50 backdrop-blur-sm">Explore AYUSH</Button>
-              </a>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Content Column */}
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-ayush-gold/20 text-ayush-forest border border-ayush-gold/40 text-xs sm:text-sm font-ui font-bold shadow-xs">
+                <Leaf className="w-4 h-4 text-ayush-gold" />
+                <span>AYUSHLINE® UNIFIED TRADITIONAL HEALING</span>
+              </div>
+
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-display font-bold text-ayush-forest leading-[1.1] tracking-tight">
+                Ancient Wisdom.<br />
+                <span className="text-ayush-gold">Modern Knowledge.</span><br />
+                One Platform.
+              </h1>
+
+              <p className="text-lg sm:text-xl lg:text-2xl text-ayush-charcoal/85 font-body max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                A universal AYUSH portal connecting verified practitioners, students, researchers, and wellness seekers globally.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                <Link to="/join" className="w-full sm:w-auto">
+                  <Button variant="primary" className="w-full sm:w-auto text-base sm:text-lg px-8 py-4 shadow-md font-bold">
+                    Register Now <ArrowRight className="w-5 h-5 ml-2" />
+                  </Button>
+                </Link>
+                <a href="#explore" className="w-full sm:w-auto">
+                  <Button variant="secondary" className="w-full sm:w-auto text-base sm:text-lg px-8 py-4 bg-white/70 backdrop-blur-md shadow-sm border border-ayush-forest/10 font-bold">
+                    Explore AYUSH
+                  </Button>
+                </a>
+              </div>
+
+              {/* Trust Stats Strip */}
+              <div className="pt-8 border-t border-ayush-forest/10 grid grid-cols-3 gap-4 max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
+                <div>
+                  <p className="text-2xl sm:text-3xl font-display font-bold text-ayush-forest">5</p>
+                  <p className="text-xs sm:text-sm font-ui text-ayush-charcoal/70">AYUSH Systems</p>
+                </div>
+                <div>
+                  <p className="text-2xl sm:text-3xl font-display font-bold text-ayush-forest">100%</p>
+                  <p className="text-xs sm:text-sm font-ui text-ayush-charcoal/70">Verified Doctors</p>
+                </div>
+                <div>
+                  <p className="text-2xl sm:text-3xl font-display font-bold text-ayush-forest">24/7</p>
+                  <p className="text-xs sm:text-sm font-ui text-ayush-charcoal/70">Consultation Access</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Visual Showcase Column */}
+            <div className="lg:col-span-5 relative hidden lg:block">
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                {/* Main Showcase Card */}
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white p-3 transform hover:rotate-1 transition-transform duration-500">
+                  <img
+                    src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80"
+                    alt="AYUSH Healing & Wellness"
+                    className="w-full h-[420px] object-cover rounded-2xl"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ayush-forest/80 via-transparent to-transparent rounded-2xl"></div>
+
+                  <div className="absolute bottom-6 left-6 right-6 text-white space-y-1">
+                    <span className="px-3 py-1 bg-ayush-gold text-ayush-forest font-ui font-bold text-xs rounded-full uppercase tracking-wider">
+                      AYUSH Excellence
+                    </span>
+                    <h3 className="text-2xl font-display font-bold text-white">Holistic Healing Ecosystem</h3>
+                    <p className="text-xs font-ui text-ayush-ivory/80">Ayurveda • Yoga • Unani • Siddha • Homeopathy</p>
+                  </div>
+                </div>
+
+                {/* Floating Practitioner Badge */}
+                <motion.div
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.6 }}
+                  className="absolute -bottom-6 -left-6 bg-white p-4 rounded-2xl shadow-xl border border-ayush-forest/10 flex items-center gap-3 backdrop-blur-md"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xl">
+                    🩺
+                  </div>
+                  <div>
+                    <p className="font-ui font-bold text-sm text-ayush-forest">Verified Specialists</p>
+                    <p className="text-xs font-ui text-ayush-charcoal/60">Connect & Consult Direct</p>
+                  </div>
+                </motion.div>
+
+                {/* Floating Rating Badge */}
+                <motion.div
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.6, duration: 0.6 }}
+                  className="absolute -top-6 -right-6 bg-white p-3.5 px-5 rounded-2xl shadow-xl border border-ayush-forest/10 flex items-center gap-2"
+                >
+                  <span className="text-xl">⭐</span>
+                  <div>
+                    <p className="font-ui font-bold text-sm text-ayush-forest">4.9 / 5 Rating</p>
+                    <p className="text-[11px] font-ui text-ayush-charcoal/60">Trusted by 50k+ Patients</p>
+                  </div>
+                </motion.div>
+              </div>
             </div>
           </div>
-        </motion.div>
-        
-        {/* Decorative elements */}
-        <motion.div 
-          initial={{ opacity: 0, rotate: 0 }}
-          animate={{ opacity: 0.2, rotate: 45 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none hidden lg:block"
-        >
-           <Leaf className="w-96 h-96 text-ayush-gold" />
         </motion.div>
       </section>
 
@@ -147,7 +220,7 @@ const Home = () => {
 
       {/* 5 AYUSH Pillars Section */}
       <section id="explore" className="py-24 bg-ayush-ivory px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div 
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
             className="text-center mb-16"
@@ -178,7 +251,7 @@ const Home = () => {
 
       {/* Membership Types */}
       <section className="py-24 bg-white px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div 
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
             className="text-center mb-16"
@@ -259,7 +332,7 @@ const Home = () => {
 
       {/* Popular Content */}
       <section className="py-24 bg-ayush-ivory px-4">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-[1600px] mx-auto">
           <motion.div 
             initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp}
             className="flex justify-between items-end mb-12"

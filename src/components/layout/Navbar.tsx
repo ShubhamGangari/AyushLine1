@@ -49,8 +49,8 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-50 bg-ayush-forest text-ayush-ivory shadow-lg" aria-label="Main navigation">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-[68px]">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-12">
+        <div className="flex items-center justify-between h-[72px]">
 
           {/* Logo with Trademark */}
           <Link to="/" className="flex items-center gap-2 flex-shrink-0">

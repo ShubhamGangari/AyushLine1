@@ -110,7 +110,7 @@ const Events = () => {
         onClose={() => setAuthModalOpen(false)}
         actionName={authActionName}
       />
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
         <div className="text-center mb-12 relative">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-ayush-sage text-ayush-forest mb-4">
             <Megaphone className="w-8 h-8" />

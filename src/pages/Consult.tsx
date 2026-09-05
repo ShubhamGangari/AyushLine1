@@ -158,7 +158,7 @@ const Consult = () => {
         onClose={() => setAuthModalOpen(false)}
         actionName={authActionName}
       />
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-[1600px] mx-auto">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ayush-gold/20 text-ayush-forest border border-ayush-gold/30 text-xs font-ui font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5 text-ayush-gold" /> Ayushline® Verified Network

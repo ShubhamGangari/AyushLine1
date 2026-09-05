@@ -192,7 +192,7 @@ const WhatsNew: React.FC = () => {
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-ayush-forest via-slate-900 to-emerald-950 text-white py-16 px-4 relative overflow-hidden border-b border-ayush-gold/20">
         <div className="absolute inset-0 bg-mandala opacity-20 pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-[1600px] mx-auto relative z-10">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ayush-gold/20 text-ayush-gold border border-ayush-gold/30 text-xs font-ui font-semibold mb-3">
@@ -250,7 +250,7 @@ const WhatsNew: React.FC = () => {
       </section>
 
       {/* Main Content Area */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <section className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-10">
         
         {/* Search & System Filter Bar */}
         <div className="bg-white rounded-3xl p-4 sm:p-6 shadow-sm border border-ayush-forest/10 mb-8 flex flex-col md:flex-row items-center justify-between gap-4">

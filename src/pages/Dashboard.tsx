@@ -173,7 +173,7 @@ export const Dashboard = ({ defaultTab }: DashboardProps) => {
 
   return (
     <div className="bg-ayush-cream min-h-screen py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto space-y-8">
+      <div className="max-w-[1600px] mx-auto space-y-8">
         
         {/* Top Header Card */}
         <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-ayush-charcoal/10 flex flex-col md:flex-row items-center justify-between gap-6">
