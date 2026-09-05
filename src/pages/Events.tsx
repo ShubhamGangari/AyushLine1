@@ -253,7 +253,7 @@ const Events = () => {
         )}
 
         {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {events.map((event) => (
             <div key={event.id} className="bg-white rounded-3xl p-0 shadow-sm border border-ayush-forest/10 hover:shadow-xl transition-all flex flex-col h-full group relative overflow-hidden">
               {event.banner_url ? (
