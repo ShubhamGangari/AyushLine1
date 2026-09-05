@@ -325,7 +325,7 @@ const Consult = () => {
             </div>
 
             {/* Doctors Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {filteredDoctors.map((doctor) => (
                 <div key={doctor.id} className="bg-white rounded-3xl p-6 shadow-sm border border-ayush-forest/10 hover:border-ayush-gold/40 hover:shadow-md transition-all flex flex-col justify-between space-y-4">
                   <div>
