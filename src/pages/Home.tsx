@@ -102,10 +102,6 @@ const Home = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content Column */}
             <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ayush-gold/20 text-ayush-forest border border-ayush-gold/40 text-xs sm:text-sm font-ui font-bold shadow-xs">
-                <Leaf className="w-4 h-4 text-ayush-gold" />
-                <span>AYUSHLINE® UNIFIED TRADITIONAL HEALING</span>
-              </div>
 
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold text-ayush-forest leading-tight tracking-tight">
                 Ancient Wisdom.<br />
