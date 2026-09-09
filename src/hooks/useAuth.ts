@@ -440,15 +440,20 @@ export function useGoogleOAuth() {
     role: string;
     redirectUrlComplete: string;
   }): Promise<boolean> => {
-    if (!isClerkConfigured) return false;
+    if (!isClerkConfigured) {
+      throw new Error('VITE_CLERK_PUBLISHABLE_KEY is not configured in Vercel Environment Variables.');
+    }
 
     const ready = await waitForClerkReady();
-    if (!ready) return false;
+    if (!ready) {
+      throw new Error('Clerk authentication service is taking too long to load. Please refresh the page.');
+    }
 
-    // Prefer the live instance resource, then the global, then the hook.
     const signUpResource =
       (clerkInstance as any)?.signUp || (window as any).Clerk?.signUp || clerkSignUp?.signUp;
-    if (!signUpResource?.authenticateWithRedirect) return false;
+    if (!signUpResource?.authenticateWithRedirect) {
+      throw new Error('Clerk SignUp provider is unavailable.');
+    }
     try {
       await signUpResource.authenticateWithRedirect({
         strategy: 'oauth_google',
@@ -457,8 +462,9 @@ export function useGoogleOAuth() {
         unsafeMetadata: { role },
       });
       return true;
-    } catch {
-      return false;
+    } catch (err: any) {
+      const msg = err?.errors?.[0]?.message || err?.message || 'Google OAuth error';
+      throw new Error(msg);
     }
   };
 
@@ -467,14 +473,20 @@ export function useGoogleOAuth() {
   }: {
     redirectUrlComplete: string;
   }): Promise<boolean> => {
-    if (!isClerkConfigured) return false;
+    if (!isClerkConfigured) {
+      throw new Error('VITE_CLERK_PUBLISHABLE_KEY is not configured in Vercel Environment Variables.');
+    }
 
     const ready = await waitForClerkReady();
-    if (!ready) return false;
+    if (!ready) {
+      throw new Error('Clerk authentication service is taking too long to load. Please refresh the page.');
+    }
 
     const signInResource =
       (clerkInstance as any)?.signIn || (window as any).Clerk?.signIn || clerkSignIn?.signIn;
-    if (!signInResource?.authenticateWithRedirect) return false;
+    if (!signInResource?.authenticateWithRedirect) {
+      throw new Error('Clerk SignIn provider is unavailable.');
+    }
     try {
       await signInResource.authenticateWithRedirect({
         strategy: 'oauth_google',
@@ -482,8 +494,9 @@ export function useGoogleOAuth() {
         redirectUrlComplete,
       });
       return true;
-    } catch {
-      return false;
+    } catch (err: any) {
+      const msg = err?.errors?.[0]?.message || err?.message || 'Google OAuth error';
+      throw new Error(msg);
     }
   };
 

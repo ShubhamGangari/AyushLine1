@@ -239,15 +239,12 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
     setError('');
     setGoogleLoading(true);
     try {
-      const started = await signUpWithGoogle({
+      await signUpWithGoogle({
         role,
         redirectUrlComplete: window.location.origin + afterSignUpUrl,
       });
-      if (!started) {
-        setError('Google Sign-Up is initializing or requires Google OAuth to be enabled in Clerk Dashboard.');
-      }
     } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'Failed to sign up with Google');
+      setError(err.errors?.[0]?.message || err.message || 'Failed to sign up with Google');
     }
     setGoogleLoading(false);
   };

@@ -96,14 +96,11 @@ const CustomSignIn = ({ onBack, afterSignInUrl = '/' }: CustomSignInProps) => {
     setError('');
     setGoogleLoading(true);
     try {
-      const started = await signInWithGoogle({
+      await signInWithGoogle({
         redirectUrlComplete: window.location.origin + afterSignInUrl,
       });
-      if (!started) {
-        setError('Google Sign-In is initializing or requires Google OAuth to be enabled in Clerk Dashboard.');
-      }
     } catch (err: any) {
-      setError(err.errors?.[0]?.message || 'Failed to sign in with Google');
+      setError(err.errors?.[0]?.message || err.message || 'Failed to sign in with Google');
     }
     setGoogleLoading(false);
   };
