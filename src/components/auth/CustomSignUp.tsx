@@ -169,6 +169,8 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
 
       if (code === 'form_identifier_exists' || rawMsg.includes('already exists') || rawMsg.includes('taken')) {
         setError('An account with this email address is already registered. Please Sign In.');
+      } else if (code === 'form_password_pwned' || rawMsg.toLowerCase().includes('data breach') || rawMsg.toLowerCase().includes('pwned')) {
+        setError('Security Alert: This password is too common and found in internet data breaches. Please choose a unique password (e.g. AyushLine#2026$).');
       } else {
         setError(rawMsg || 'Account creation failed. Please check details and try again.');
       }
