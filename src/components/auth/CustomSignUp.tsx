@@ -37,6 +37,7 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [infoMsg, setInfoMsg] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isPwnedError, setIsPwnedError] = useState(false);
   const { signUpWithGoogle } = useGoogleOAuth();
 
   // Role-specific fields
@@ -169,10 +170,13 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
 
       if (code === 'form_identifier_exists' || rawMsg.includes('already exists') || rawMsg.includes('taken')) {
         setError('An account with this email address is already registered. Please Sign In.');
-      } else if (code === 'form_password_pwned' || rawMsg.toLowerCase().includes('data breach') || rawMsg.toLowerCase().includes('pwned')) {
-        setError('Security Alert: This password is too common and found in internet data breaches. Please choose a unique password (e.g. AyushLine#2026$).');
+        setIsPwnedError(false);
+      } else if (code === 'form_password_pwned' || rawMsg.toLowerCase().includes('data breach') || rawMsg.toLowerCase().includes('pwned') || rawMsg.toLowerCase().includes('different password')) {
+        setIsPwnedError(true);
+        setError('Security Alert: This password (like Hello@1234) is flagged in leaked databases.');
       } else {
         setError(rawMsg || 'Account creation failed. Please check details and try again.');
+        setIsPwnedError(false);
       }
     }
     setLoading(false);
@@ -513,9 +517,33 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
           </div>
 
           {error && (
-            <div className="bg-red-50 text-red-600 text-sm font-ui px-4 py-3 rounded-xl border border-red-100 flex items-start gap-2 animate-shake">
-              <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
-              <span>{error}</span>
+            <div className="bg-red-50 text-red-600 text-sm font-ui p-4 rounded-xl border border-red-200 flex flex-col gap-2.5 animate-shake">
+              <div className="flex items-start gap-2">
+                <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                <span className="leading-snug">{error}</span>
+              </div>
+              {isPwnedError && (
+                <div className="pt-2 border-t border-red-200/60 flex flex-col gap-2">
+                  <p className="text-xs text-red-700 font-medium">
+                    Easy fix: Click below to fill a safe, guaranteed password!
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const randNum = Math.floor(1000 + Math.random() * 9000);
+                      const safePass = `Ayush#${randNum}Pass`;
+                      setPassword(safePass);
+                      setConfirmPassword(safePass);
+                      setShowPassword(true);
+                      setError('');
+                      setIsPwnedError(false);
+                    }}
+                    className="self-start inline-flex items-center gap-2 px-3.5 py-2 bg-ayush-forest hover:bg-ayush-forest/90 text-white text-xs font-bold rounded-lg transition-all shadow-sm cursor-pointer"
+                  >
+                    <span>✨ Auto-Fill Safe Password</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
