@@ -244,20 +244,7 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
         redirectUrlComplete: window.location.origin + afterSignUpUrl,
       });
       if (!started) {
-        // Local mode or fallback Google sign-up
-        const randomNum = Math.floor(1000 + Math.random() * 9000);
-        const googleUser = {
-          id: `usr_google_${Date.now()}`,
-          email: email.trim() || `google.user${randomNum}@gmail.com`,
-          name: name.trim() || 'Google User',
-          role: role || 'user',
-          avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
-          createdAt: new Date().toISOString(),
-        };
-        saveLocalUser(googleUser);
-        setLocalSession(googleUser);
-        await saveProfileAndFinish(googleUser.id);
-        return;
+        setError('Google Sign-Up is initializing or requires Google OAuth to be enabled in Clerk Dashboard.');
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || 'Failed to sign up with Google');

@@ -22,7 +22,7 @@ const SSOCallback = () => {
         (user.publicMetadata as any)?.role;
 
       const role = metadataRole || 'user';
-      const name = user.fullName || [user.firstName, user.lastName].filter(Boolean).join(' ') || 'Google User';
+      const name = user.fullName || [user.firstName, user.lastName].filter(Boolean).join(' ') || user.primaryEmailAddress?.emailAddress?.split('@')[0] || 'User';
       const email = user.primaryEmailAddress?.emailAddress || '';
 
       saveLocalUser({
