@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSignUp, useGoogleOAuth, setLocalSession, saveLocalUser } from '../../hooks/useAuth';
+import { useSignUp, useGoogleOAuth } from '../../hooks/useAuth';
 import { Button } from '../../components/ui/Button';
 import { User, Lock, ArrowLeft, Eye, EyeOff, AlertCircle, CheckCircle2, GraduationCap, Stethoscope } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -201,18 +201,7 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
           setError('Verification in progress. Please check and try again.');
         }
       } else {
-        // Local demo mode verification
-        const mockUser = {
-          id: `usr_${Date.now()}`,
-          email,
-          name,
-          role,
-          createdAt: new Date().toISOString(),
-        };
-        saveLocalUser(mockUser);
-        setLocalSession(mockUser);
-        await saveProfileAndFinish(mockUser.id);
-        return;
+        setError('Verification service unavailable. Please try again.');
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || 'Invalid verification code. Please check your email and try again.');
@@ -227,8 +216,6 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
       if (signUp?.prepareEmailAddressVerification) {
         await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
         setInfoMsg('A new 6-digit OTP code has been sent to your email address!');
-      } else {
-        setInfoMsg('Demo Mode: Verification OTP code reset. You can enter any 6-digit code (e.g. 123456).');
       }
     } catch (err: any) {
       setError(err.errors?.[0]?.message || 'Failed to resend code. Please try again in a few seconds.');

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useSignIn, setLocalSession, saveLocalUser, isLocalAuthMode, useGoogleOAuth } from '../../hooks/useAuth';
+import { useSignIn, useGoogleOAuth } from '../../hooks/useAuth';
 import { Button } from '../../components/ui/Button';
 import { User, Lock, ArrowLeft, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { validateEmail } from '../../lib/authValidation';
-import { createOrUpsertProfile } from '../../lib/api/profiles';
 
 const GoogleIcon = () => (
   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -238,95 +237,7 @@ const CustomSignIn = ({ onBack, afterSignInUrl = '/' }: CustomSignInProps) => {
           </Button>
         </form>
 
-        {isLocalAuthMode() && (
-          <div className="mt-8 pt-6 border-t border-ayush-charcoal/10">
-            <p className="text-xs font-ui font-semibold text-ayush-forest uppercase tracking-wider text-center mb-3">
-              ⚡ Quick Demo Login (Instant Preview Testing)
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={async () => {
-                  const user = {
-                    id: 'demo_doctor_1',
-                    email: 'doctor@ayushline.com',
-                    name: 'Dr. Priya Verma (Practitioner)',
-                    role: 'doctor' as const,
-                    avatarUrl: 'https://ui-avatars.com/api/?name=Priya+Verma&background=5C8A3C&color=fff',
-                    createdAt: new Date().toISOString()
-                  };
-                  saveLocalUser(user);
-                  setLocalSession(user);
-                  await createOrUpsertProfile(user.id, { name: user.name, email: user.email, role: user.role, specialization: 'Ayurveda Specialist' });
-                  window.location.href = '/dashboard';
-                }}
-                className="py-2.5 px-3 bg-ayush-ivory hover:bg-ayush-gold/10 border border-ayush-forest/20 rounded-xl text-xs font-ui font-bold text-ayush-forest transition-all text-center flex items-center justify-center gap-1.5 shadow-2xs"
-              >
-                🩺 Demo Doctor / Practitioner
-              </button>
-              <button
-                type="button"
-                onClick={async () => {
-                  const user = {
-                    id: 'demo_student_1',
-                    email: 'student@ayushline.com',
-                    name: 'Aarav Sharma (Student)',
-                    role: 'student' as const,
-                    avatarUrl: 'https://ui-avatars.com/api/?name=Aarav+Sharma&background=0D9488&color=fff',
-                    createdAt: new Date().toISOString()
-                  };
-                  saveLocalUser(user);
-                  setLocalSession(user);
-                  await createOrUpsertProfile(user.id, { name: user.name, email: user.email, role: user.role, college: 'National Institute of Ayurveda' });
-                  window.location.href = '/dashboard';
-                }}
-                className="py-2.5 px-3 bg-ayush-ivory hover:bg-ayush-gold/10 border border-ayush-forest/20 rounded-xl text-xs font-ui font-bold text-ayush-forest transition-all text-center flex items-center justify-center gap-1.5 shadow-2xs"
-              >
-                🎓 Demo Student
-              </button>
-              <button
-                type="button"
-                onClick={async () => {
-                  const user = {
-                    id: 'demo_org_1',
-                    email: 'org@ayushline.com',
-                    name: 'Ayurveda Sansthan',
-                    role: 'org' as const,
-                    avatarUrl: 'https://ui-avatars.com/api/?name=Ayurveda+Sansthan&background=7B4FA6&color=fff',
-                    createdAt: new Date().toISOString()
-                  };
-                  saveLocalUser(user);
-                  setLocalSession(user);
-                  await createOrUpsertProfile(user.id, { name: user.name, email: user.email, role: user.role, accreditation: 'Ministry of AYUSH' });
-                  window.location.href = '/dashboard';
-                }}
-                className="py-2.5 px-3 bg-ayush-ivory hover:bg-ayush-gold/10 border border-ayush-forest/20 rounded-xl text-xs font-ui font-bold text-ayush-forest transition-all text-center flex items-center justify-center gap-1.5 shadow-2xs"
-              >
-                🏥 Demo Institution
-              </button>
-              <button
-                type="button"
-                onClick={async () => {
-                  const user = {
-                    id: 'demo_user_1',
-                    email: 'user@ayushline.com',
-                    name: 'Rahul Verma',
-                    role: 'user' as const,
-                    avatarUrl: 'https://ui-avatars.com/api/?name=Rahul+Verma&background=D97706&color=fff',
-                    createdAt: new Date().toISOString()
-                  };
-                  saveLocalUser(user);
-                  setLocalSession(user);
-                  await createOrUpsertProfile(user.id, { name: user.name, email: user.email, role: user.role });
-                  window.location.href = '/dashboard';
-                }}
-                className="py-2.5 px-3 bg-ayush-ivory hover:bg-ayush-gold/10 border border-ayush-forest/20 rounded-xl text-xs font-ui font-bold text-ayush-forest transition-all text-center flex items-center justify-center gap-1.5 shadow-2xs"
-              >
-                👤 Demo Patient / User
-              </button>
-            </div>
-          </div>
-        )}
+
       </div>
 
     </div>
