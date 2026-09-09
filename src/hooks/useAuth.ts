@@ -53,38 +53,37 @@ export const isClerkConfigured =
   !PUBLISHABLE_KEY.startsWith('pk_test_your_') &&
   !PUBLISHABLE_KEY.includes('Y2xlci1pbi1jbGVyay');
 
-// If Clerk does not become ready within this window (slow network, blocked domain,
-// or missing allowlist entry), the app gracefully falls back to the local auth mode
-// so users are never stuck on a loading screen. Kept short so the page never
-// feels slow even when Clerk is unresponsive.
-const CLERK_LOAD_TIMEOUT_MS = 500;
+const CLERK_LOAD_TIMEOUT_MS = 8000;
 
-// Module-level flag: once the local fallback activates, any component can query it
-// (e.g. to show demo-login shortcuts) even though it is not React state.
 let activeLocalAuthMode = false;
 
 /**
  * Returns `true` when the local auth fallback should be used:
  * - Clerk is not configured at all, OR
  * - Clerk is configured but failed to become ready within the timeout.
- * Once the fallback activates it stays active for the session, so the UI never
- * flips identity mid-way if Clerk happens to load very late.
  */
 function useClerkFallbackActive(clerkIsLoaded: boolean): boolean {
-  const [timedOut, setTimedOut] = useState<boolean>(() => !isClerkConfigured);
+  const [timedOut, setTimedOut] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!isClerkConfigured || timedOut) return;
-    if (clerkIsLoaded) return; // still loading – keep waiting
+    if (!isClerkConfigured) {
+      setTimedOut(true);
+      return;
+    }
+    if (clerkIsLoaded) {
+      setTimedOut(false);
+      activeLocalAuthMode = false;
+      return;
+    }
     const t = setTimeout(() => {
       activeLocalAuthMode = true;
       setTimedOut(true);
     }, CLERK_LOAD_TIMEOUT_MS);
+
     return () => clearTimeout(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clerkIsLoaded]);
 
-  return timedOut;
+  return !isClerkConfigured || (timedOut && !clerkIsLoaded);
 }
 
 /**
