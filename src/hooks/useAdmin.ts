@@ -5,6 +5,7 @@ import { isClerkConfigured, useAuth, isLocalAuthMode } from './useAuth';
 // Explicitly recognized admin User IDs (including user's Clerk ID)
 const HARDCODED_ADMIN_USER_IDS = [
   'user_3J5YR8wS6wh6XnquYEzMVNqwSP8',
+  'user_3J6CCVGjA3S8T4466lwnuXa8N9J',
 ];
 
 // Explicitly recognized admin Email addresses
