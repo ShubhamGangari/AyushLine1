@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useAdmin } from '../hooks/useAdmin';
 import { getProfile, type UserRole } from '../lib/api/profiles';
 import { StudentDashboard } from '../components/dashboard/StudentDashboard';
 import { PractitionerDashboard } from '../components/dashboard/PractitionerDashboard';
@@ -161,7 +162,8 @@ export const Dashboard = ({ defaultTab }: DashboardProps) => {
     );
   }
 
-  const isAdmin = activeRole === 'admin';
+  const { isAdmin: isSystemAdmin } = useAdmin();
+  const isAdmin = isSystemAdmin || activeRole === 'admin';
 
   // Filter user appointments
   const filteredAppointments = appointments.filter((a) => {
@@ -194,7 +196,15 @@ export const Dashboard = ({ defaultTab }: DashboardProps) => {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto justify-end">
+          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-end">
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className="px-5 py-3 rounded-xl bg-ayush-forest text-ayush-gold font-ui font-bold text-sm flex items-center gap-2 hover:bg-ayush-forest/90 transition-all shadow-md"
+              >
+                <ShieldCheck className="w-4 h-4 text-ayush-gold" /> Admin Portal
+              </Link>
+            )}
             <Link
               to="/profile"
               className="px-5 py-3 rounded-xl bg-ayush-cream text-ayush-forest border border-ayush-forest/20 font-ui font-bold text-sm flex items-center gap-2 hover:bg-ayush-sage transition-all"
