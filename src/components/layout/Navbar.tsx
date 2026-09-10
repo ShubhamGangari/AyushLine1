@@ -150,6 +150,7 @@ const Navbar = () => {
                 <Link
                   key={sys.path}
                   to={sys.path}
+                  onClick={() => setMobileOpen(false)}
                   className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors"
                 >
                   <span>{sys.icon}</span>
@@ -166,6 +167,7 @@ const Navbar = () => {
               { name: 'About Us', path: '/about' },
             ].map((link) => (
               <Link key={link.path} to={link.path}
+                onClick={() => setMobileOpen(false)}
                 className="block px-3 py-2.5 rounded-xl text-sm font-ui text-ayush-ivory/85 hover:bg-white/10 hover:text-ayush-gold transition-colors">
                 {link.name}
               </Link>
@@ -175,12 +177,14 @@ const Navbar = () => {
           <div className="border-t border-white/10 pt-4 mt-2">
             {isAdmin && (
               <Link to="/admin"
+                onClick={() => setMobileOpen(false)}
                 className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-sm font-bold text-ayush-saffron hover:bg-white/10 mb-1">
                 <ShieldCheck className="w-4 h-4" /> Admin Portal
               </Link>
             )}
             {isLoaded && !isSignedIn && (
               <Link to="/join"
+                onClick={() => setMobileOpen(false)}
                 className="block w-full text-center py-3 rounded-full bg-ayush-gold text-ayush-forest font-ui font-semibold text-sm">
                 Join / Login
               </Link>
