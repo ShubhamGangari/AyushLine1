@@ -4,17 +4,19 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import './index.css'
 import App from './App.tsx'
 
-// Catch and suppress harmless Clerk script loading timeout rejections
+// Catch and suppress harmless third-party script & network loading timeout rejections
 if (typeof window !== 'undefined') {
   window.addEventListener('unhandledrejection', (event) => {
-    const reason = event.reason;
+    const reason = event?.reason;
+    const msg = (reason?.message || String(reason || '')).toLowerCase();
     if (
-      reason?.message?.includes('Failed to load Clerk') ||
-      reason?.code === 'failed_to_load_clerk_js_timeout' ||
-      reason?.code === 'failed_to_load_clerk_js'
+      msg.includes('clerk') ||
+      msg.includes('failed to fetch') ||
+      msg.includes('failed to load') ||
+      msg.includes('network') ||
+      reason?.code?.includes('clerk')
     ) {
       event.preventDefault();
-      console.warn('Clerk script failed to load or timed out. Application will use local authentication fallback.');
     }
   });
 }

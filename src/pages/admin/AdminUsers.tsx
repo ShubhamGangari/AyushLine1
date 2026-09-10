@@ -116,87 +116,162 @@ const AdminUsers: React.FC = () => {
           No users found {filter !== 'all' && `for category "${filter}"`}.
         </div>
       ) : (
-        <div className="bg-white rounded-2xl border border-ayush-charcoal/10 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-ayush-sage/30 border-b border-ayush-charcoal/10">
-                <tr>
-                  <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">User Profile</th>
-                  <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Email</th>
-                  <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Mobile / Phone</th>
-                  <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Assigned Role</th>
-                  <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Joined On</th>
-                  <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-ayush-charcoal/5">
-                {filtered.map(u => {
-                  const badge = ROLE_BADGES[u.role] || ROLE_BADGES.student;
-                  const Icon = badge.icon;
+        <div>
+          {/* Mobile Card View (small screens) */}
+          <div className="md:hidden space-y-4">
+            {filtered.map(u => {
+              const badge = ROLE_BADGES[u.role] || ROLE_BADGES.student;
+              const Icon = badge.icon;
 
-                  return (
-                    <tr key={u.id} className="hover:bg-ayush-ivory/40 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ayush-forest to-emerald-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">
-                            {u.avatar_url ? (
-                              <img src={u.avatar_url} alt={u.name || ''} className="w-full h-full rounded-full object-cover" />
-                            ) : (
-                              u.name?.charAt(0)?.toUpperCase() || 'U'
-                            )}
+              return (
+                <div key={u.id} className="bg-white rounded-2xl p-5 border border-ayush-charcoal/10 shadow-sm space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-11 h-11 rounded-full bg-gradient-to-br from-ayush-forest to-emerald-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">
+                        {u.avatar_url ? (
+                          <img src={u.avatar_url} alt={u.name || ''} className="w-full h-full rounded-full object-cover" />
+                        ) : (
+                          u.name?.charAt(0)?.toUpperCase() || 'U'
+                        )}
+                      </div>
+                      <div className="min-w-0">
+                        <p className="font-ui font-bold text-ayush-forest text-sm truncate">
+                          {u.name || 'Anonymous User'}
+                        </p>
+                        <p className="text-[10px] text-ayush-charcoal/40 font-ui font-mono truncate">{u.id.slice(0, 18)}...</p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setDeleteId(u.id)}
+                      className="p-2 bg-red-50 text-red-600 rounded-xl font-ui text-xs font-semibold hover:bg-red-100 transition-colors flex-shrink-0"
+                      title="Delete User"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-1.5 pt-2 border-t border-ayush-charcoal/5 text-xs font-ui text-ayush-charcoal/80">
+                    <div className="flex items-center gap-2">
+                      <Mail className="w-3.5 h-3.5 text-ayush-gold flex-shrink-0" />
+                      <span className="truncate">{u.email || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Phone className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                      <span className="font-bold text-emerald-700 truncate">{u.whatsapp || u.phone || 'N/A'}</span>
+                    </div>
+                    <div className="flex items-center gap-2 pt-1">
+                      <Calendar className="w-3.5 h-3.5 text-ayush-gold flex-shrink-0" />
+                      <span className="text-ayush-charcoal/60">
+                        Joined: {u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="pt-2 border-t border-ayush-charcoal/5 flex items-center justify-between gap-2">
+                    <span className="text-xs font-ui font-semibold text-ayush-forest">Role:</span>
+                    <div className="flex items-center gap-2">
+                      <Icon className="w-4 h-4 text-ayush-forest/70" />
+                      <select
+                        value={u.role === 'user' ? 'student' : (u.role || 'student')}
+                        onChange={e => handleRoleChange(u.id, e.target.value as UserRole)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-bold border-0 cursor-pointer focus:ring-2 focus:ring-ayush-gold ${badge.bg} ${badge.text}`}
+                      >
+                        <option value="student">Student / Seeker</option>
+                        <option value="doctor">Practitioner / Doctor</option>
+                        <option value="org">Organization</option>
+                        <option value="admin">System Admin</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Table View (md and up) */}
+          <div className="hidden md:block bg-white rounded-2xl border border-ayush-charcoal/10 shadow-sm overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[850px]">
+                <thead className="bg-ayush-sage/30 border-b border-ayush-charcoal/10">
+                  <tr>
+                    <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">User Profile</th>
+                    <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Email</th>
+                    <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Mobile / Phone</th>
+                    <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Assigned Role</th>
+                    <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Joined On</th>
+                    <th className="text-left px-6 py-4 text-xs font-ui font-bold text-ayush-forest uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-ayush-charcoal/5">
+                  {filtered.map(u => {
+                    const badge = ROLE_BADGES[u.role] || ROLE_BADGES.student;
+                    const Icon = badge.icon;
+
+                    return (
+                      <tr key={u.id} className="hover:bg-ayush-ivory/40 transition-colors whitespace-nowrap">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-ayush-forest to-emerald-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0 shadow-sm">
+                              {u.avatar_url ? (
+                                <img src={u.avatar_url} alt={u.name || ''} className="w-full h-full rounded-full object-cover" />
+                              ) : (
+                                u.name?.charAt(0)?.toUpperCase() || 'U'
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-ui font-bold text-ayush-forest text-sm flex items-center gap-1.5">
+                                {u.name || 'Anonymous User'}
+                              </p>
+                              <p className="text-[10px] text-ayush-charcoal/40 font-ui font-mono">{u.id.slice(0, 18)}...</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="font-ui font-bold text-ayush-forest text-sm flex items-center gap-1.5">
-                              {u.name || 'Anonymous User'}
-                            </p>
-                            <p className="text-[10px] text-ayush-charcoal/40 font-ui font-mono">{u.id.slice(0, 18)}...</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="flex items-center gap-1.5 text-sm font-ui text-ayush-charcoal/80">
+                            <Mail className="w-3.5 h-3.5 text-ayush-gold flex-shrink-0" />{u.email || 'N/A'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="flex items-center gap-1.5 text-xs font-ui font-bold text-emerald-700">
+                            <Phone className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />{u.whatsapp || u.phone || 'N/A'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <Icon className="w-4 h-4 text-ayush-forest/70" />
+                            <select
+                              value={u.role === 'user' ? 'student' : (u.role || 'student')}
+                              onChange={e => handleRoleChange(u.id, e.target.value as UserRole)}
+                              className={`px-3 py-1.5 rounded-full text-xs font-bold border-0 cursor-pointer focus:ring-2 focus:ring-ayush-gold ${badge.bg} ${badge.text}`}
+                            >
+                              <option value="student">Student / Seeker</option>
+                              <option value="doctor">Practitioner / Doctor</option>
+                              <option value="org">Organization</option>
+                              <option value="admin">System Admin</option>
+                            </select>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="flex items-center gap-1.5 text-sm font-ui text-ayush-charcoal/80">
-                          <Mail className="w-3.5 h-3.5 text-ayush-gold flex-shrink-0" />{u.email || 'N/A'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="flex items-center gap-1.5 text-xs font-ui font-bold text-emerald-700">
-                          <Phone className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />{u.whatsapp || u.phone || 'N/A'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-2">
-                          <Icon className="w-4 h-4 text-ayush-forest/70" />
-                          <select
-                            value={u.role === 'user' ? 'student' : (u.role || 'student')}
-                            onChange={e => handleRoleChange(u.id, e.target.value as UserRole)}
-                            className={`px-3 py-1.5 rounded-full text-xs font-bold border-0 cursor-pointer focus:ring-2 focus:ring-ayush-gold ${badge.bg} ${badge.text}`}
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className="flex items-center gap-1.5 text-xs font-ui text-ayush-charcoal/60">
+                            <Calendar className="w-3.5 h-3.5 text-ayush-gold" />
+                            {u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          <button
+                            onClick={() => setDeleteId(u.id)}
+                            className="px-3 py-1.5 bg-red-50 text-red-600 rounded-xl font-ui text-xs font-semibold hover:bg-red-100 transition-colors flex items-center gap-1"
                           >
-                            <option value="student">Student / Seeker</option>
-                            <option value="doctor">Practitioner / Doctor</option>
-                            <option value="org">Organization</option>
-                            <option value="admin">System Admin</option>
-                          </select>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className="flex items-center gap-1.5 text-xs font-ui text-ayush-charcoal/60">
-                          <Calendar className="w-3.5 h-3.5 text-ayush-gold" />
-                          {u.created_at ? new Date(u.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Recently'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4">
-                        <button
-                          onClick={() => setDeleteId(u.id)}
-                          className="px-3 py-1.5 bg-red-50 text-red-600 rounded-xl font-ui text-xs font-semibold hover:bg-red-100 transition-colors flex items-center gap-1"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" /> Delete
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                            <Trash2 className="w-3.5 h-3.5" /> Delete
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
