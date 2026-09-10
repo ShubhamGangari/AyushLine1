@@ -46,12 +46,12 @@ const AdminPosts: React.FC = () => {
           <p className="text-ayush-charcoal/70 font-body text-sm mt-1">Review user submitted articles before they are published to the public portal.</p>
         </div>
 
-        <div className="flex items-center space-x-2 bg-white p-1 rounded-full border border-ayush-forest/10 shadow-sm self-start">
+        <div className="flex items-center space-x-2 bg-white p-1 rounded-full border border-ayush-forest/10 shadow-sm self-start overflow-x-auto max-w-full no-scrollbar">
           {(['all', 'pending', 'approved', 'rejected'] as const).map(type => (
             <button
               key={type}
               onClick={() => setFilter(type)}
-              className={`px-4 py-1.5 rounded-full text-xs font-ui font-semibold capitalize transition-all ${
+              className={`px-4 py-1.5 rounded-full text-xs font-ui font-semibold capitalize transition-all whitespace-nowrap ${
                 filter === type ? 'bg-ayush-forest text-white' : 'text-ayush-charcoal/70 hover:text-ayush-forest'
               }`}
             >

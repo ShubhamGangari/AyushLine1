@@ -48,7 +48,7 @@ const AdminDoctors: React.FC = () => {
         </div>
 
         {/* Filter Buttons */}
-        <div className="flex items-center space-x-2 bg-white p-1 rounded-full border border-ayush-forest/10 shadow-sm self-start">
+        <div className="flex items-center space-x-2 bg-white p-1 rounded-full border border-ayush-forest/10 shadow-sm self-start overflow-x-auto max-w-full no-scrollbar">
           {(['all', 'pending', 'approved', 'rejected'] as const).map(type => (
             <button
               key={type}
