@@ -146,16 +146,65 @@ export const SiddhaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size })
   </svg>
 );
 
-// 5. Homeopathy Icon - 💊 Medicine Pill Emoji
+// 5. Homeopathy Icon - Test Tube with Remedy Globules & Sprouting Green Leaves (Matching Reference Image)
 export const HomeopathyIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
-  <span
-    className={getEmojiClass(className)}
-    style={size ? { fontSize: `${size}px`, width: `${size}px`, height: `${size}px` } : undefined}
-    role="img"
-    aria-label="Homeopathy"
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className.includes('text-') ? className : `text-[#2A6B5E] ${className}`}
+    width={size}
+    height={size}
   >
-    💊
-  </span>
+    {/* Sprouting Stem from Test Tube Mouth */}
+    <path d="M12 9.5V5.5" stroke="#5C8A3C" strokeWidth="1.6" strokeLinecap="round" />
+    
+    {/* Left Sprouting Green Leaf */}
+    <path
+      d="M12 5.5C9.8 4 7.5 5 7 7C9.2 7.2 11 6 12 5.5Z"
+      fill="#5C8A3C"
+      stroke="#5C8A3C"
+      strokeWidth="0.8"
+    />
+    
+    {/* Right Sprouting Green Leaf */}
+    <path
+      d="M12 5.5C14.2 4 16.5 5 17 7C14.8 7.2 13 6 12 5.5Z"
+      fill="#5C8A3C"
+      stroke="#5C8A3C"
+      strokeWidth="0.8"
+    />
+    
+    {/* Test Tube Top Rim Lip */}
+    <rect
+      x="7.5"
+      y="7.5"
+      width="9"
+      height="2"
+      rx="1"
+      fill="currentColor"
+      fillOpacity="0.2"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    />
+    
+    {/* Test Tube Glass Outer Body */}
+    <path
+      d="M9 9.5V19C9 20.65 10.35 22 12 22C13.65 22 15 20.65 15 19V9.5"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      fill="currentColor"
+      fillOpacity="0.12"
+    />
+    
+    {/* White Homeopathic Remedy Globules / Sugar Pills at Bottom */}
+    <circle cx="10.8" cy="19.8" r="1.1" fill="currentColor" fillOpacity="0.95" />
+    <circle cx="13.2" cy="19.8" r="1.1" fill="currentColor" fillOpacity="0.95" />
+    <circle cx="12" cy="17.9" r="1.1" fill="currentColor" fillOpacity="0.95" />
+    <circle cx="10.8" cy="16" r="1.1" fill="currentColor" fillOpacity="0.95" />
+    <circle cx="13.2" cy="16" r="1.1" fill="currentColor" fillOpacity="0.95" />
+  </svg>
 );
 
 
