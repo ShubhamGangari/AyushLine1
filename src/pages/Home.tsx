@@ -21,6 +21,8 @@ const staggerContainer = {
   }
 };
 
+import { AyurvedaIcon, YogaIcon, UnaniIcon, SiddhaIcon, HomeopathyIcon } from '../components/ui/SystemIcons';
+
 const Home = () => {
   const [latestPosts, setLatestPosts] = useState<Post[]>([]);
 
@@ -31,39 +33,40 @@ const Home = () => {
     }
     loadHomePosts();
   }, []);
+
   const ayushPillars = [
     {
       id: 'ayurveda',
       name: 'Ayurveda',
-      icon: <Leaf className="text-[#5C8A3C] w-8 h-8 mb-4" />,
+      icon: <AyurvedaIcon className="w-8 h-8 mb-4" />,
       desc: 'Ancient Indian science of Doshas, Dhatus & natural healing.',
       system: 'ayurveda' as const,
     },
     {
       id: 'yoga',
       name: 'Yoga',
-      icon: <Activity className="text-[#7B4FA6] w-8 h-8 mb-4" />,
+      icon: <YogaIcon className="w-8 h-8 mb-4" />,
       desc: 'Physical, mental & spiritual well-being through practice.',
       system: 'yoga' as const,
     },
     {
       id: 'unani',
       name: 'Unani',
-      icon: <Droplets className="text-[#2E7D9A] w-8 h-8 mb-4" />,
+      icon: <UnaniIcon className="w-8 h-8 mb-4" />,
       desc: 'Greco-Arab healing via humoral balance & herbs.',
       system: 'unani' as const,
     },
     {
       id: 'siddha',
       name: 'Siddha',
-      icon: <Moon className="text-[#B5451B] w-8 h-8 mb-4" />,
+      icon: <SiddhaIcon className="w-8 h-8 mb-4" />,
       desc: 'Ancient Tamil system of balance & mineral remedies.',
       system: 'siddha' as const,
     },
     {
       id: 'homeopathy',
       name: 'Homeopathy',
-      icon: <FlaskConical className="text-[#2A6B5E] w-8 h-8 mb-4" />,
+      icon: <HomeopathyIcon className="w-8 h-8 mb-4" />,
       desc: "'Like cures like' with natural diluted substances.",
       system: 'homeopathy' as const,
     },
@@ -124,22 +127,6 @@ const Home = () => {
                     Explore AYUSH
                   </Button>
                 </a>
-              </div>
-
-              {/* Trust Stats Strip */}
-              <div className="pt-5 border-t border-ayush-forest/10 grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0 text-center lg:text-left">
-                <div>
-                  <p className="text-2xl sm:text-3xl font-display font-bold text-ayush-forest">5</p>
-                  <p className="text-xs font-ui text-ayush-charcoal/70">AYUSH Systems</p>
-                </div>
-                <div>
-                  <p className="text-2xl sm:text-3xl font-display font-bold text-ayush-forest">100%</p>
-                  <p className="text-xs font-ui text-ayush-charcoal/70">Verified Doctors</p>
-                </div>
-                <div>
-                  <p className="text-2xl sm:text-3xl font-display font-bold text-ayush-forest">24/7</p>
-                  <p className="text-xs font-ui text-ayush-charcoal/70">Consultation</p>
-                </div>
               </div>
             </div>
 

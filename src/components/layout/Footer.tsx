@@ -138,6 +138,7 @@ const Footer = () => {
           <div className="flex space-x-6">
             <Link to="/privacy-policy" className="hover:text-ayush-gold transition-colors">Privacy Policy</Link>
             <Link to="/disclaimer" className="hover:text-ayush-gold transition-colors">Disclaimer</Link>
+            <Link to="/sitemap" className="hover:text-ayush-gold transition-colors">Sitemap</Link>
           </div>
         </div>
         <div className="mt-4 pt-4 border-t border-ayush-ivory/10 text-center text-xs font-ui text-ayush-ivory/40">

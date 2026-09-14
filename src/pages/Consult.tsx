@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Search, Wand2, ArrowRight, Mic, MicOff, X, Phone, Eye, MapPin, Award, Stethoscope, Sparkles } from 'lucide-react';
+import { Calendar, Search, Wand2, ArrowRight, Mic, MicOff, X, Eye, MapPin, Award, Stethoscope, Sparkles, MessageSquare } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { getApprovedDoctors, type Doctor } from '../lib/api/doctors';
 import { createAppointment } from '../lib/api/appointments';
@@ -398,10 +398,11 @@ const Consult = () => {
                         href={`https://wa.me/${(doctor.whatsapp || doctor.phone).replace(/[^0-9]/g, '')}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="px-2.5 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl font-ui text-xs font-bold flex items-center justify-center border border-emerald-200 transition-colors"
-                        title="Chat on WhatsApp"
+                        className="px-3 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl font-ui text-xs font-bold flex items-center justify-center border border-emerald-200 transition-colors gap-1.5"
+                        title="Chat with Doctor"
                       >
-                        <Phone className="w-3.5 h-3.5" />
+                        <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Chat</span>
                       </a>
                     )}
                   </div>

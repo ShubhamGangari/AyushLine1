@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSignUp, useGoogleOAuth } from '../../hooks/useAuth';
 import { Button } from '../../components/ui/Button';
-import { User, Lock, ArrowLeft, Eye, EyeOff, AlertCircle, CheckCircle2, GraduationCap, Stethoscope } from 'lucide-react';
+import { User, Lock, ArrowLeft, Eye, EyeOff, AlertCircle, CheckCircle2, GraduationCap, Stethoscope, Building2, Building, BookOpen } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createOrUpsertProfile, type UserRole } from '../../lib/api/profiles';
 import { registerDoctor } from '../../lib/api/doctors';
@@ -60,17 +60,17 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
       name: name.trim(),
       email: email.trim(),
       role,
+      system,
     };
     if (role === 'student') {
       profileData.college = college;
       profileData.qualification = degree;
-      profileData.system = system;
       profileData.bio = bio;
     } else if (role === 'doctor') {
       profileData.specialization = specialization;
       profileData.qualification = qualification;
       profileData.experience_years = experienceYears ? parseInt(experienceYears, 10) : 0;
-      profileData.system = system;
+      profileData.college = college;
       profileData.address = clinicName;
       profileData.city = city;
       profileData.whatsapp = whatsapp;
@@ -90,6 +90,11 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
         bio,
         status: 'pending',
       });
+    } else if (role === 'org') {
+      profileData.address = clinicName;
+      profileData.city = city;
+      profileData.whatsapp = whatsapp;
+      profileData.bio = bio;
     }
     await createOrUpsertProfile(userId, profileData);
     window.location.href = afterSignUpUrl;
@@ -395,27 +400,53 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
           {/* Role Selector */}
           <div>
             <label className="block text-sm font-ui font-semibold text-ayush-forest mb-2">Account Type</label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
                 onClick={() => setRole('student')}
-                className={`flex items-center justify-center gap-2 py-3 rounded-xl border font-ui font-semibold text-sm transition-all ${role === 'student' ? 'border-ayush-forest bg-ayush-forest text-white' : 'border-ayush-forest/20 text-ayush-forest hover:bg-ayush-sage'}`}
+                className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl border font-ui font-semibold text-xs transition-all ${role === 'student' ? 'border-ayush-forest bg-ayush-forest text-white' : 'border-ayush-forest/20 text-ayush-forest hover:bg-ayush-sage'}`}
               >
-                <GraduationCap className="w-4 h-4" /> Student
+                <GraduationCap className="w-4 h-4 shrink-0" /> Student
               </button>
               <button
                 type="button"
                 onClick={() => setRole('doctor')}
-                className={`flex items-center justify-center gap-2 py-3 rounded-xl border font-ui font-semibold text-sm transition-all ${role === 'doctor' ? 'border-ayush-forest bg-ayush-forest text-white' : 'border-ayush-forest/20 text-ayush-forest hover:bg-ayush-sage'}`}
+                className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl border font-ui font-semibold text-xs transition-all ${role === 'doctor' ? 'border-ayush-forest bg-ayush-forest text-white' : 'border-ayush-forest/20 text-ayush-forest hover:bg-ayush-sage'}`}
               >
-                <Stethoscope className="w-4 h-4" /> Doctor
+                <Stethoscope className="w-4 h-4 shrink-0" /> Doctor
+              </button>
+              <button
+                type="button"
+                onClick={() => setRole('org')}
+                className={`flex items-center justify-center gap-1.5 py-2.5 px-2 rounded-xl border font-ui font-semibold text-xs transition-all ${role === 'org' ? 'border-ayush-forest bg-ayush-forest text-white' : 'border-ayush-forest/20 text-ayush-forest hover:bg-ayush-sage'}`}
+              >
+                <Building2 className="w-4 h-4 shrink-0" /> Organisation
               </button>
             </div>
           </div>
 
+          {/* AYUSH System Selector */}
           <div>
             <label className="block text-sm font-ui font-semibold text-ayush-forest mb-1">
-              Full Name
+              AYUSH System
+            </label>
+            <select
+              value={system}
+              onChange={(e) => setSystem(e.target.value)}
+              className="block w-full px-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all text-sm capitalize"
+            >
+              <option value="ayurveda">Ayurveda</option>
+              <option value="yoga">Yoga & Naturopathy</option>
+              <option value="sowa-rigpa">Sowa-Rigpa</option>
+              <option value="unani">Unani</option>
+              <option value="siddha">Siddha</option>
+              <option value="homeopathy">Homeopathy</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-ui font-semibold text-ayush-forest mb-1">
+              {role === 'org' ? 'Contact Person Name' : 'Full Name'}
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -426,11 +457,53 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="block w-full pl-10 pr-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all text-sm"
-                placeholder="Dr. John Doe"
+                placeholder={role === 'doctor' ? 'Dr. John Doe' : 'Full Name'}
                 required
               />
             </div>
           </div>
+
+          {/* College Name for Student / Doctor */}
+          {(role === 'student' || role === 'doctor') && (
+            <div>
+              <label className="block text-sm font-ui font-semibold text-ayush-forest mb-1">
+                College / Institution Name
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <BookOpen className="h-5 w-5 text-ayush-charcoal/40" />
+                </div>
+                <input
+                  type="text"
+                  value={college}
+                  onChange={(e) => setCollege(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all text-sm"
+                  placeholder="e.g. National Institute of Ayurveda, Jaipur"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Organisation / Clinic Name for Organisation / Doctor */}
+          {(role === 'org' || role === 'doctor') && (
+            <div>
+              <label className="block text-sm font-ui font-semibold text-ayush-forest mb-1">
+                {role === 'org' ? 'Organisation / Hospital Name' : 'Clinic / Hospital Name'}
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Building className="h-5 w-5 text-ayush-charcoal/40" />
+                </div>
+                <input
+                  type="text"
+                  value={clinicName}
+                  onChange={(e) => setClinicName(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all text-sm"
+                  placeholder={role === 'org' ? 'e.g. Patanjali Wellness Centre' : 'e.g. Ayush Health Clinic'}
+                />
+              </div>
+            </div>
+          )}
 
           <div>
             <label className="block text-sm font-ui font-semibold text-ayush-forest mb-1">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Stethoscope, Award, Camera, ShieldAlert, CheckCircle } from 'lucide-react';
+import { User, Stethoscope, Award, Camera, ShieldAlert, CheckCircle, BookOpen, Building } from 'lucide-react';
 import { useAuth, isClerkConfigured } from '../hooks/useAuth';
 import { Button } from '../components/ui/Button';
 import { registerDoctor } from '../lib/api/doctors';
@@ -13,6 +13,8 @@ const DoctorRegistration = () => {
   const [specialization, setSpecialization] = useState('');
   const [experience, setExperience] = useState('5');
   const [qualification, setQualification] = useState('');
+  const [college, setCollege] = useState('');
+  const [clinicName, setClinicName] = useState('');
   const [city, setCity] = useState('');
   const [bio, setBio] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,6 +32,7 @@ const DoctorRegistration = () => {
       specialization,
       experience_years: parseInt(experience, 10) || 0,
       qualification,
+      clinic_name: clinicName,
       city,
       bio,
     });
@@ -43,6 +46,8 @@ const DoctorRegistration = () => {
         specialization,
         system,
         qualification,
+        college,
+        address: clinicName,
         experience_years: parseInt(experience, 10) || 0,
         city,
         bio,
@@ -159,11 +164,46 @@ const DoctorRegistration = () => {
                       className="block w-full px-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all capitalize"
                     >
                       <option value="ayurveda">Ayurveda</option>
-                      <option value="yoga">Yoga Therapy</option>
+                      <option value="yoga">Yoga & Naturopathy</option>
+                      <option value="sowa-rigpa">Sowa-Rigpa</option>
                       <option value="unani">Unani</option>
                       <option value="siddha">Siddha</option>
                       <option value="homeopathy">Homeopathy</option>
                     </select>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-ui font-semibold text-ayush-forest mb-2">College / Institution Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <BookOpen className="h-5 w-5 text-ayush-charcoal/40" />
+                      </div>
+                      <input
+                        type="text"
+                        value={college}
+                        onChange={(e) => setCollege(e.target.value)}
+                        className="block w-full pl-10 pr-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all"
+                        placeholder="e.g. National Institute of Ayurveda"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-ui font-semibold text-ayush-forest mb-2">Organisation / Hospital / Clinic Name</label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <Building className="h-5 w-5 text-ayush-charcoal/40" />
+                      </div>
+                      <input
+                        type="text"
+                        value={clinicName}
+                        onChange={(e) => setClinicName(e.target.value)}
+                        className="block w-full pl-10 pr-3 py-3 border border-ayush-forest/20 rounded-xl focus:ring-2 focus:ring-ayush-gold focus:border-ayush-gold bg-ayush-ivory/50 font-ui transition-all"
+                        placeholder="e.g. Ayush Wellness Clinic"
+                      />
+                    </div>
                   </div>
                 </div>
 
