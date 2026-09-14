@@ -44,11 +44,10 @@ const STORAGE_SESSION_KEY = 'ayush_active_session_v2';
 const PUBLISHABLE_KEY = ((import.meta.env?.VITE_CLERK_PUBLISHABLE_KEY as string) || '').trim();
 export const isClerkConfigured =
   Boolean(PUBLISHABLE_KEY) &&
-  PUBLISHABLE_KEY.startsWith('pk_') &&
+  (PUBLISHABLE_KEY.startsWith('pk_live_') || PUBLISHABLE_KEY.startsWith('pk_test_')) &&
   PUBLISHABLE_KEY.length > 20 &&
   PUBLISHABLE_KEY !== 'pk_test_placeholder' &&
-  !PUBLISHABLE_KEY.startsWith('pk_test_your_') &&
-  !PUBLISHABLE_KEY.includes('Y2xlci1pbi1jbGVyay');
+  !PUBLISHABLE_KEY.startsWith('pk_test_your_');
 
 const CLERK_LOAD_TIMEOUT_MS = 8000;
 
