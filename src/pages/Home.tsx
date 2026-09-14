@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '../components/ui/Button';
 import { Card, CardTag } from '../components/ui/Card';
-import { Leaf, ArrowRight, Activity, Droplets, Moon, FlaskConical, Stethoscope, GraduationCap, Building2, BookOpen, MessageSquare, PenTool, Video } from 'lucide-react';
+import { Leaf, ArrowRight, Activity, Droplets, Moon, FlaskConical, Stethoscope, GraduationCap, Building2, BookOpen, MessageSquare, PenTool, Video, Sparkles, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { getApprovedPosts, getPostImage, type Post } from '../lib/api/posts';
@@ -75,7 +75,7 @@ const Home = () => {
   return (
     <div className="w-full bg-ayush-cream">
       {/* Hero Section */}
-      <section className="relative w-full bg-ayush-sage bg-mandala min-h-[calc(100vh-72px)] flex items-center overflow-hidden">
+      <section className="relative w-full bg-ayush-sage bg-mandala min-h-[calc(100vh-72px)] flex items-center overflow-hidden py-10 lg:py-16">
         <div className="absolute inset-0 bg-ayush-sage/40"></div>
         
         {/* AYUSH Watermark Animations */}
@@ -100,53 +100,80 @@ const Home = () => {
 
         <motion.div 
           initial="hidden" animate="visible" variants={fadeInUp}
-          className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-10 w-full py-6 lg:py-8"
+          className="relative z-10 max-w-[1536px] mx-auto px-4 sm:px-6 lg:px-10 w-full"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             {/* Left Content Column */}
-            <div className="lg:col-span-7 space-y-5 text-center lg:text-left">
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left flex flex-col items-center lg:items-start">
 
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold text-ayush-forest leading-tight tracking-tight">
+              {/* Top Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-ayush-forest/10 border border-ayush-forest/20 text-ayush-forest text-xs sm:text-sm font-ui font-bold shadow-xs">
+                <Sparkles className="w-4 h-4 text-ayush-gold animate-pulse" />
+                <span>Universal AYUSH Healing Portal</span>
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-display font-extrabold text-ayush-forest leading-[1.18] tracking-tight">
                 Ancient Wisdom.<br />
-                <span className="text-ayush-gold">Modern Knowledge.</span><br />
+                <span className="bg-gradient-to-r from-amber-700 via-ayush-gold to-emerald-800 bg-clip-text text-transparent">
+                  Modern Knowledge.
+                </span><br />
                 One Platform.
               </h1>
 
-              <p className="text-base sm:text-lg lg:text-xl text-ayush-charcoal/85 font-body max-w-xl mx-auto lg:mx-0 leading-relaxed">
-                A universal AYUSH portal connecting verified practitioners, students, researchers, and wellness seekers globally.
+              <p className="text-base sm:text-lg lg:text-xl text-ayush-charcoal/90 font-body max-w-xl mx-auto lg:mx-0 leading-relaxed font-medium">
+                Connecting verified practitioners, students, institutions & wellness seekers across Ayurveda, Yoga, Unani, Siddha & Homeopathy.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-1">
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2 w-full sm:w-auto">
                 <Link to="/join" className="w-full sm:w-auto">
-                  <Button variant="primary" className="w-full sm:w-auto text-base px-7 py-3.5 shadow-md font-bold">
+                  <Button variant="primary" className="w-full sm:w-auto text-base px-8 py-4 shadow-lg font-bold rounded-2xl">
                     Register Now <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
                 <a href="#explore" className="w-full sm:w-auto">
-                  <Button variant="secondary" className="w-full sm:w-auto text-base px-7 py-3.5 bg-white/80 backdrop-blur-md shadow-sm border border-ayush-forest/10 font-bold">
+                  <Button variant="secondary" className="w-full sm:w-auto text-base px-8 py-4 bg-white/90 backdrop-blur-md shadow-sm border border-ayush-forest/15 font-bold rounded-2xl hover:bg-ayush-gold hover:text-white">
                     Explore AYUSH
                   </Button>
                 </a>
               </div>
+
+              {/* Quick Pillars Badge Strip for Mobile & Desktop */}
+              <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-2 text-xs font-ui font-bold text-ayush-forest/80">
+                <span className="px-3 py-1 bg-white/80 rounded-full border border-ayush-forest/10 shadow-xs flex items-center gap-1">
+                  <ShieldCheck className="w-3.5 h-3.5 text-ayush-gold" /> Verified Practitioners
+                </span>
+                <span className="px-3 py-1 bg-white/80 rounded-full border border-ayush-forest/10 shadow-xs flex items-center gap-1">
+                  <GraduationCap className="w-3.5 h-3.5 text-ayush-gold" /> Colleges & Students
+                </span>
+                <span className="px-3 py-1 bg-white/80 rounded-full border border-ayush-forest/10 shadow-xs flex items-center gap-1">
+                  <Building2 className="w-3.5 h-3.5 text-ayush-gold" /> Organizations
+                </span>
+              </div>
             </div>
 
-            {/* Right Visual Showcase Column */}
-            <div className="lg:col-span-5 relative hidden lg:block">
-              <div className="relative mx-auto">
-                <div className="relative rounded-3xl overflow-hidden shadow-xl border-4 border-white bg-white p-2.5">
+            {/* Right Visual Showcase Column (Shown on all screen sizes now) */}
+            <div className="lg:col-span-5 relative mt-4 lg:mt-0">
+              <div className="relative mx-auto max-w-md lg:max-w-none">
+                <div className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-white p-2.5">
                   <img
                     src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80"
                     alt="AYUSH Healing & Wellness"
-                    className="w-full h-[320px] lg:h-[350px] object-cover rounded-2xl"
+                    className="w-full h-[220px] sm:h-[300px] lg:h-[360px] object-cover rounded-2xl"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      target.onerror = null;
+                      target.src = 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=800&auto=format&fit=crop&q=80';
+                    }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-ayush-forest/85 via-transparent to-transparent rounded-2xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-ayush-forest/90 via-ayush-forest/20 to-transparent rounded-2xl"></div>
 
-                  <div className="absolute bottom-5 left-5 right-5 text-white space-y-1">
-                    <span className="px-3 py-1 bg-ayush-gold text-ayush-forest font-ui font-bold text-xs rounded-full uppercase tracking-wider">
+                  <div className="absolute bottom-5 left-5 right-5 text-white space-y-1.5 text-left">
+                    <span className="px-3 py-1 bg-ayush-gold text-ayush-forest font-ui font-bold text-[10px] sm:text-xs rounded-full uppercase tracking-wider inline-block">
                       AYUSH Excellence
                     </span>
-                    <h3 className="text-xl font-display font-bold text-white">Holistic Healing Ecosystem</h3>
-                    <p className="text-xs font-ui text-ayush-ivory/80">Ayurveda • Yoga • Unani • Siddha • Homeopathy</p>
+                    <h3 className="text-lg sm:text-2xl font-display font-bold text-white leading-tight">Holistic Healing Ecosystem</h3>
+                    <p className="text-xs font-ui text-ayush-ivory/90">Ayurveda • Yoga • Unani • Siddha • Homeopathy</p>
                   </div>
                 </div>
               </div>
