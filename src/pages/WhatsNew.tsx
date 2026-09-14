@@ -51,13 +51,15 @@ const SUBSECTIONS: SubSectionConfig[] = [
   { id: 'research', name: 'Research', emoji: '🔬', icon: <Microscope className="w-4 h-4" />, description: 'Peer-reviewed clinical trials, pharmacological analyses, and scientific publications.' },
 ];
 
+import { AyurvedaIcon, YogaIcon, UnaniIcon, SiddhaIcon, HomeopathyIcon } from '../components/ui/SystemIcons';
+
 const SYSTEM_FILTERS = [
-  { id: 'all', label: 'All Systems' },
-  { id: 'ayurveda', label: '🌿 Ayurveda' },
-  { id: 'yoga', label: '🧘 Yoga' },
-  { id: 'unani', label: '⚗️ Unani' },
-  { id: 'siddha', label: '🔬 Siddha' },
-  { id: 'homeopathy', label: '💊 Homeopathy' },
+  { id: 'all', label: 'All Systems', icon: null },
+  { id: 'ayurveda', label: 'Ayurveda', icon: <AyurvedaIcon className="w-4 h-4 shrink-0 inline-block mr-1" /> },
+  { id: 'yoga', label: 'Yoga & Naturopathy', icon: <YogaIcon className="w-4 h-4 shrink-0 inline-block mr-1" /> },
+  { id: 'unani', label: 'Unani', icon: <UnaniIcon className="w-4 h-4 shrink-0 inline-block mr-1" /> },
+  { id: 'siddha', label: 'Siddha', icon: <SiddhaIcon className="w-4 h-4 shrink-0 inline-block mr-1" /> },
+  { id: 'homeopathy', label: 'Homeopathy', icon: <HomeopathyIcon className="w-4 h-4 shrink-0 inline-block mr-1" /> },
 ];
 
 const WhatsNew: React.FC = () => {
@@ -273,13 +275,14 @@ const WhatsNew: React.FC = () => {
               <button
                 key={sys.id}
                 onClick={() => setSelectedSystem(sys.id)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-ui font-semibold transition-all whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-ui font-semibold transition-all whitespace-nowrap flex items-center gap-1 ${
                   selectedSystem === sys.id
                     ? 'bg-ayush-forest text-white shadow-sm'
-                    : 'bg-ayush-cream text-ayush-charcoal/70 hover:bg-ayush-sage/60'
+                    : 'bg-ayush-sage/60 text-ayush-charcoal hover:bg-ayush-sage'
                 }`}
               >
-                {sys.label}
+                {sys.icon}
+                <span>{sys.label}</span>
               </button>
             ))}
           </div>

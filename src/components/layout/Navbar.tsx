@@ -4,13 +4,14 @@ import { useState, useRef, useEffect } from 'react';
 import { useAuth, UserButton } from '../../hooks/useAuth';
 import { useAdmin } from '../../hooks/useAdmin';
 import { AyushlineLogo } from '../ui/AyushlineLogo';
+import { AyurvedaIcon, YogaIcon, UnaniIcon, SiddhaIcon, HomeopathyIcon } from '../ui/SystemIcons';
 
 const AYUSH_SYSTEMS = [
-  { name: 'Ayurveda', path: '/ayurveda', icon: '🌿', desc: 'Ancient Indian healing' },
-  { name: 'Yoga & Naturopathy', path: '/yoga', icon: '🧘', desc: 'Mind-body wellness' },
-  { name: 'Unani', path: '/unani', icon: '⚗️', desc: 'Greco-Arab medicine' },
-  { name: 'Siddha', path: '/siddha', icon: '🔬', desc: 'Tamil healing system' },
-  { name: 'Homeopathy', path: '/homeopathy', icon: '💊', desc: 'Like cures like' },
+  { name: 'Ayurveda', path: '/ayurveda', icon: <AyurvedaIcon className="w-6 h-6 shrink-0" />, desc: 'Ancient Indian healing' },
+  { name: 'Yoga & Naturopathy', path: '/yoga', icon: <YogaIcon className="w-6 h-6 shrink-0" />, desc: 'Mind-body wellness' },
+  { name: 'Unani', path: '/unani', icon: <UnaniIcon className="w-6 h-6 shrink-0" />, desc: 'Greco-Arab medicine' },
+  { name: 'Siddha', path: '/siddha', icon: <SiddhaIcon className="w-6 h-6 shrink-0" />, desc: 'Tamil healing system' },
+  { name: 'Homeopathy', path: '/homeopathy', icon: <HomeopathyIcon className="w-6 h-6 shrink-0" />, desc: 'Like cures like' },
 ];
 
 const Navbar = () => {

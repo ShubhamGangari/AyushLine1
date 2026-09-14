@@ -3,6 +3,7 @@ import { ArrowRight, Search, Filter } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getApprovedPosts, getPostImage, type Post } from '../lib/api/posts';
+import { AyurvedaIcon, YogaIcon, UnaniIcon, SiddhaIcon, HomeopathyIcon } from '../components/ui/SystemIcons';
 
 type SystemType = 'ayurveda' | 'yoga' | 'unani' | 'siddha' | 'homeopathy';
 
@@ -11,6 +12,16 @@ interface CategoryProps {
   title: string;
   description: string;
 }
+
+const renderSystemIcon = (sys: SystemType) => {
+  switch (sys) {
+    case 'ayurveda': return <AyurvedaIcon className="w-16 h-16 mx-auto mb-3" />;
+    case 'yoga': return <YogaIcon className="w-16 h-16 mx-auto mb-3" />;
+    case 'unani': return <UnaniIcon className="w-16 h-16 mx-auto mb-3" />;
+    case 'siddha': return <SiddhaIcon className="w-16 h-16 mx-auto mb-3" />;
+    case 'homeopathy': return <HomeopathyIcon className="w-16 h-16 mx-auto mb-3" />;
+  }
+};
 
 const Category = ({ system, title, description }: CategoryProps) => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -38,11 +49,14 @@ const Category = ({ system, title, description }: CategoryProps) => {
   return (
     <div className="w-full bg-ayush-cream min-h-screen">
       {/* Hero Banner */}
-      <section className="relative w-full bg-ayush-forest bg-mandala py-24 border-b border-ayush-gold/20">
+      <section className="relative w-full bg-ayush-forest bg-mandala py-20 border-b border-ayush-gold/20">
         <div className="absolute inset-0 bg-ayush-forest/80"></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="flex justify-center mb-2">
+            {renderSystemIcon(system)}
+          </div>
           <CardTag system={system}>{title}</CardTag>
-          <h1 className="text-4xl md:text-6xl font-display font-bold text-ayush-cream mt-4 mb-4">
+          <h1 className="text-4xl md:text-6xl font-display font-bold text-ayush-cream mt-2 mb-4">
             {title}
           </h1>
           <p className="text-xl text-ayush-ivory/90 font-body max-w-2xl mx-auto">
