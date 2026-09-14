@@ -86,7 +86,9 @@ const Navbar = () => {
                       onClick={() => setAyushOpen(false)}
                       className="flex items-center gap-3 px-4 py-2.5 hover:bg-ayush-cream transition-colors group"
                     >
-                      <span className="text-xl leading-none" aria-hidden="true">{sys.icon}</span>
+                      <div className="w-7 h-7 flex items-center justify-center shrink-0">
+                        {sys.icon}
+                      </div>
                       <div>
                         <p className="text-sm font-ui font-bold text-ayush-forest group-hover:text-ayush-gold transition-colors">{sys.name}</p>
                         <p className="text-[11px] text-ayush-charcoal/50">{sys.desc}</p>
@@ -152,9 +154,11 @@ const Navbar = () => {
                   key={sys.path}
                   to={sys.path}
                   onClick={() => setMobileOpen(false)}
-                  className="flex items-center gap-2 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors"
+                  className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl hover:bg-white/10 transition-colors"
                 >
-                  <span>{sys.icon}</span>
+                  <div className="w-6 h-6 flex items-center justify-center shrink-0">
+                    {sys.icon}
+                  </div>
                   <span className="text-sm font-ui text-ayush-ivory/90">{sys.name}</span>
                 </Link>
               ))}
