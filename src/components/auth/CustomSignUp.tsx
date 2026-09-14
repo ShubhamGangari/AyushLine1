@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSignUp, useGoogleOAuth } from '../../hooks/useAuth';
 import { Button } from '../../components/ui/Button';
 import { User, Lock, ArrowLeft, Eye, EyeOff, AlertCircle, CheckCircle2, GraduationCap, Stethoscope, Building2, Building, BookOpen } from 'lucide-react';
@@ -42,6 +42,12 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
 
   // Role-specific fields
   const [role, setRole] = useState<UserRole>(selectedRole);
+
+  useEffect(() => {
+    if (selectedRole && selectedRole !== 'user') {
+      setRole(selectedRole);
+    }
+  }, [selectedRole]);
   const [college, setCollege] = useState('');
   const [degree, setDegree] = useState('BAMS');
   const [system, setSystem] = useState('ayurveda');

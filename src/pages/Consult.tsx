@@ -393,18 +393,16 @@ const Consult = () => {
                       <span className="sm:hidden">Profile</span>
                     </button>
 
-                    {(doctor.whatsapp || doctor.phone) && (
-                      <a
-                        href={`https://wa.me/${(doctor.whatsapp || doctor.phone).replace(/[^0-9]/g, '')}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-3 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl font-ui text-xs font-bold flex items-center justify-center border border-emerald-200 transition-colors gap-1.5"
-                        title="Chat with Doctor"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-                        <span>Chat</span>
-                      </a>
-                    )}
+                    <a
+                      href={`https://wa.me/${(doctor.whatsapp || doctor.phone || '919876543210').replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(doctor.name)}%2C%20I%20want%20to%20consult%20you%20via%20AYUSHLINE.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-3 py-2.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl font-ui text-xs font-bold flex items-center justify-center border border-emerald-200 transition-colors gap-1.5"
+                      title="Chat with Doctor"
+                    >
+                      <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Chat</span>
+                    </a>
                   </div>
                 </div>
               ))}

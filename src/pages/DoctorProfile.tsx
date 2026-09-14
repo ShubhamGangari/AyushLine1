@@ -256,7 +256,7 @@ const DoctorProfile: React.FC = () => {
     );
   }
 
-  const whatsappNum = (doctor.whatsapp || doctor.phone || '').replace(/[^0-9]/g, '');
+  const whatsappNum = (doctor.whatsapp || doctor.phone || '919876543210').replace(/[^0-9]/g, '');
   const systemKey = (doctor.system || 'Ayurveda').toLowerCase().replace(' therapy', '').trim();
   const systemColor = SYSTEM_COLORS[systemKey] || 'bg-ayush-forest/10 text-ayush-forest';
 
@@ -333,21 +333,19 @@ const DoctorProfile: React.FC = () => {
               >
                 <Calendar className="w-5 h-5" /> Book Appointment
               </button>
-              {whatsappNum && (
-                <a
-                  href={`https://wa.me/${whatsappNum}?text=Hello%20${encodeURIComponent(doctor.name)}%2C%20I%20found%20your%20profile%20on%20AYUSHLINE%20and%20would%20like%20to%20consult%20you.`}
-                  target="_blank"
-                  rel="noreferrer"
-                  onClick={(e) => {
-                    if (!requireAuth('contact doctor on WhatsApp')) {
-                      e.preventDefault();
-                    }
-                  }}
-                  className="px-8 py-3.5 bg-emerald-600 text-white font-ui font-bold rounded-2xl hover:bg-emerald-500 transition-all shadow-lg flex items-center justify-center gap-2"
-                >
-                  <MessageSquare className="w-5 h-5" /> WhatsApp Direct
-                </a>
-              )}
+              <a
+                href={`https://wa.me/${whatsappNum}?text=Hello%20${encodeURIComponent(doctor.name)}%2C%20I%20found%20your%20profile%20on%20AYUSHLINE%20and%20would%20like%20to%20consult%20you.`}
+                target="_blank"
+                rel="noreferrer"
+                onClick={(e) => {
+                  if (!requireAuth('contact doctor on WhatsApp')) {
+                    e.preventDefault();
+                  }
+                }}
+                className="px-8 py-3.5 bg-emerald-600 text-white font-ui font-bold rounded-2xl hover:bg-emerald-500 transition-all shadow-lg flex items-center justify-center gap-2"
+              >
+                <MessageSquare className="w-5 h-5" /> WhatsApp Direct
+              </a>
               <div className="flex gap-2">
                 <button
                   onClick={() => setLiked(!liked)}

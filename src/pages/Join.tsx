@@ -20,7 +20,7 @@ const Join = () => {
 
   const isSignIn = currentPath.includes('sign-in');
   const isForgotPassword = currentPath.includes('forgot-password');
-  const isSignUp = currentPath.includes('sign-up') || (!isSignIn && !isForgotPassword && roleSelected !== 'user');
+  const isSignUp = currentPath.includes('sign-up');
 
   // Auto-redirect when already signed in. The page itself renders instantly —
   // this effect only fires once auth state is known (Clerk loads in the
@@ -37,6 +37,11 @@ const Join = () => {
     navigate(`/join/sign-up?role=${r}`);
   };
 
+  const handleBackToRoles = () => {
+    setRoleSelected('user');
+    navigate('/join');
+  };
+
   const renderForm = () => {
     if (isForgotPassword) {
       return (
@@ -50,7 +55,7 @@ const Join = () => {
     if (isSignIn) {
       return (
         <CustomSignIn
-          onBack={() => navigate('/join')}
+          onBack={handleBackToRoles}
           afterSignInUrl="/dashboard"
         />
       );
@@ -59,7 +64,7 @@ const Join = () => {
     if (isSignUp) {
       return (
         <CustomSignUp
-          onBack={() => navigate('/join')}
+          onBack={handleBackToRoles}
           afterSignUpUrl="/dashboard"
           selectedRole={roleParam}
         />
