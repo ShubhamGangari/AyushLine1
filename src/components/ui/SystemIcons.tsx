@@ -100,16 +100,50 @@ export const UnaniIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) 
   </svg>
 );
 
-// 4. Siddha Icon - 🔬 Laboratory Microscope Emoji
+// 4. Siddha Icon - Mortar & Pestle Grinding Bowl with Herbal Branch (Matching Reference Image)
 export const SiddhaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
-  <span
-    className={getEmojiClass(className)}
-    style={size ? { fontSize: `${size}px`, width: `${size}px`, height: `${size}px` } : undefined}
-    role="img"
-    aria-label="Siddha"
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className.includes('text-') ? className : `text-[#B5451B] ${className}`}
+    width={size}
+    height={size}
   >
-    🔬
-  </span>
+    {/* Pestle Handle Knob on top */}
+    <circle cx="16.5" cy="4" r="1.8" fill="currentColor" />
+    
+    {/* Pestle Shaft angled into bowl */}
+    <path d="M16 4.5L10.5 13" stroke="currentColor" strokeWidth="2.8" strokeLinecap="round" />
+    
+    {/* Mortar Bowl Top Rim */}
+    <ellipse cx="11.5" cy="11.5" rx="8.5" ry="2.2" stroke="currentColor" strokeWidth="1.8" fill="currentColor" fillOpacity="0.12" />
+    
+    {/* Mortar Bowl Body */}
+    <path
+      d="M3 11.5C3 16.5 6.5 18 11.5 18C16.5 18 20 16.5 20 11.5"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      fill="currentColor"
+      fillOpacity="0.12"
+    />
+    
+    {/* Mortar Pedestal Base */}
+    <path
+      d="M7 18.2C7 19.5 9 20.2 11.5 20.2C14 20.2 16 19.5 16 18.2"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      fill="currentColor"
+      fillOpacity="0.25"
+    />
+    
+    {/* 3-Leaf Herbal Branch on Bottom Right */}
+    <path d="M14.5 21C16.5 18.5 18 16 18.5 14.5" stroke="#5C8A3C" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M18.5 14.5C17 12 19 10 20.5 10.5C21 12 19.5 14 18.5 14.5Z" fill="#5C8A3C" />
+    <path d="M16.5 16.5C14.5 15.5 14.5 13.5 16 13.5C17.5 13.5 17 15.5 16.5 16.5Z" fill="#5C8A3C" />
+    <path d="M17.5 18.5C19.5 18.5 20.5 17 20 16C19 15.5 18 17 17.5 18.5Z" fill="#5C8A3C" />
+  </svg>
 );
 
 // 5. Homeopathy Icon - 💊 Medicine Pill Emoji
