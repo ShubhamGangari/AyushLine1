@@ -5,7 +5,7 @@ interface IconProps {
   size?: number;
 }
 
-// 1. Ayurveda Icon - Healing Herbal Leaf with Veins
+// 1. Ayurveda Icon - Healing Botanical Leaf with Veins
 export const AyurvedaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
   <svg
     viewBox="0 0 24 24"
@@ -16,25 +16,23 @@ export const AyurvedaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size 
     height={size}
   >
     <path
-      d="M12 2C6.5 2 4 8.5 4 13.5C4 17.64 7.36 21 11.5 21C16.5 21 20 16.5 20 9.5C20 9.5 14.5 9 12 2Z"
+      d="M12 2C6.5 2 4 8 4 13.5C4 17.6 7.4 21 11.5 21C16.5 21 20 16.5 20 9.5C20 9.5 14.5 9 12 2Z"
+      fill="currentColor"
+      fillOpacity="0.15"
       stroke="currentColor"
       strokeWidth="1.8"
-      strokeLinecap="round"
       strokeLinejoin="round"
-      fill="currentColor"
-      fillOpacity="0.12"
     />
     <path
-      d="M12 21V9.5M12 13.5C9.5 12 8 12.5 8 12.5M12 16.5C14.5 15 16.5 15.5 16.5 15.5"
+      d="M12 21V10M12 14C9.5 12.5 8 13 8 13M12 16.5C14.5 15 16.5 15.5 16.5 15.5"
       stroke="currentColor"
       strokeWidth="1.8"
       strokeLinecap="round"
-      strokeLinejoin="round"
     />
   </svg>
 );
 
-// 2. Yoga Icon - Meditating Yogi in Padmasana (Lotus Pose)
+// 2. Yoga Icon - Meditating Person in Padmasana (Lotus Posture)
 export const YogaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
   <svg
     viewBox="0 0 24 24"
@@ -44,32 +42,29 @@ export const YogaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) =
     width={size}
     height={size}
   >
-    <circle cx="12" cy="4.5" r="2.2" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.6" />
+    {/* Yogi Head / Crown Aura */}
+    <circle cx="12" cy="4.5" r="2" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="1.8" />
+    
+    {/* Torso & Spine */}
+    <path d="M12 6.5V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    
+    {/* Arms in Gyan Mudra resting on knees */}
+    <path d="M12 8C9.5 8.8 7 11 5.5 14C4.5 16 6 17 8 16.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M12 8C14.5 8.8 17 11 18.5 14C19.5 16 18 17 16 16.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    
+    {/* Lotus Crossed Legs Base */}
     <path
-      d="M12 7V13"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-    />
-    <path
-      d="M12 8.5C9.5 9.5 7.5 11 6.5 13.5C5.5 16 6.5 17 8 17M12 8.5C14.5 9.5 16.5 11 17.5 13.5C18.5 16 17.5 17 16 17"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-    />
-    <path
-      d="M4 19.5C6.5 17.5 9.5 16.5 12 16.5C14.5 16.5 17.5 17.5 20 19.5C17.5 20.5 14.5 21 12 21C9.5 21 6.5 20.5 4 19.5Z"
+      d="M4 18.5C6 16 9 15 12 15C15 15 18 16 20 18.5C18 20.5 15 21.5 12 21.5C9 21.5 6 20.5 4 18.5Z"
       fill="currentColor"
       fillOpacity="0.15"
       stroke="currentColor"
       strokeWidth="1.8"
-      strokeLinecap="round"
       strokeLinejoin="round"
     />
   </svg>
 );
 
-// 3. Unani Icon - Apothecary Hikmat Flask & Extract
+// 3. Unani Icon - Hikmat Apothecary Flask & Decoction Leaf
 export const UnaniIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
   <svg
     viewBox="0 0 24 24"
@@ -81,21 +76,15 @@ export const UnaniIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) 
   >
     <path d="M10 3.5H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
     <path
-      d="M11 3.5V7L6.5 16C5.5 18 6.5 20.5 9.5 20.5H14.5C17.5 20.5 18.5 18 17.5 16L13 7V3.5"
+      d="M11 3.5V7.5L6.5 16C5.5 18 6.8 20.5 9.5 20.5H14.5C17.2 20.5 18.5 18 17.5 16L13 7.5V3.5"
+      fill="currentColor"
+      fillOpacity="0.12"
       stroke="currentColor"
       strokeWidth="1.8"
-      strokeLinecap="round"
       strokeLinejoin="round"
-      fill="currentColor"
-      fillOpacity="0.1"
     />
-    <path
-      d="M8.2 13C10.5 12 13.5 14 15.8 13"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-    />
-    <circle cx="12" cy="16.5" r="1.5" fill="currentColor" />
+    <path d="M8 14C10.5 13 13.5 15 16 14" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    <path d="M12 11.5C11 12.5 11 14 12 15C13 14 13 12.5 12 11.5Z" fill="currentColor" stroke="currentColor" strokeWidth="1" />
   </svg>
 );
 
@@ -109,19 +98,13 @@ export const SiddhaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size })
     width={size}
     height={size}
   >
+    <path d="M16.5 3.5L11 11" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" />
     <path
-      d="M17 3.5L11.5 11.5"
-      stroke="currentColor"
-      strokeWidth="2.4"
-      strokeLinecap="round"
-    />
-    <path
-      d="M4 11H20C20 11 19 17.5 12 17.5C5 17.5 4 11 4 11Z"
+      d="M4 11H20C20 11 18.8 17.5 12 17.5C5.2 17.5 4 11 4 11Z"
       fill="currentColor"
-      fillOpacity="0.15"
+      fillOpacity="0.18"
       stroke="currentColor"
       strokeWidth="1.8"
-      strokeLinecap="round"
       strokeLinejoin="round"
     />
     <path
@@ -130,16 +113,11 @@ export const SiddhaIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size })
       fillOpacity="0.3"
       stroke="currentColor"
       strokeWidth="1.5"
-      strokeLinejoin="round"
-    />
-    <path
-      d="M19 15.5C20.5 14.5 21.5 15 22 16.5C20.5 17 19.5 16.5 19 15.5Z"
-      fill="currentColor"
     />
   </svg>
 );
 
-// 5. Homeopathy Icon - Liquid Dropper & Remedy Globules
+// 5. Homeopathy Icon - Liquid Medicine Dropper & Remedy Globules
 export const HomeopathyIcon: React.FC<IconProps> = ({ className = "w-8 h-8", size }) => (
   <svg
     viewBox="0 0 24 24"
@@ -151,13 +129,12 @@ export const HomeopathyIcon: React.FC<IconProps> = ({ className = "w-8 h-8", siz
   >
     <path d="M10 2.5H14V5H10V2.5Z" fill="currentColor" fillOpacity="0.3" stroke="currentColor" strokeWidth="1.5" />
     <path
-      d="M11 5V13.5L12 16L13 13.5V5"
+      d="M11 5V13L12 15.5L13 13V5"
+      fill="currentColor"
+      fillOpacity="0.12"
       stroke="currentColor"
       strokeWidth="1.8"
-      strokeLinecap="round"
       strokeLinejoin="round"
-      fill="currentColor"
-      fillOpacity="0.1"
     />
     <path
       d="M12 18.5C12 18.5 10.5 20.2 12 21.5C13.5 20.2 12 18.5 12 18.5Z"
@@ -165,9 +142,10 @@ export const HomeopathyIcon: React.FC<IconProps> = ({ className = "w-8 h-8", siz
       stroke="currentColor"
       strokeWidth="1.2"
     />
-    <circle cx="6.5" cy="19" r="1.8" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="17.5" cy="19" r="1.8" fill="currentColor" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="6.5" cy="19" r="1.8" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="17.5" cy="19" r="1.8" fill="currentColor" fillOpacity="0.25" stroke="currentColor" strokeWidth="1.5" />
   </svg>
 );
+
 
 
