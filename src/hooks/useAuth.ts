@@ -147,13 +147,12 @@ function useLocalAuthState() {
   return currentUser;
 }
 
-// ─── Clerk Authentication Hook (100% Rules of Hooks compliant) ───────────────
+// ─── Clerk Authentication Hook (Guaranteed zero conditional returns before hooks) ───
 function useClerkAuthHook(localUser: LocalUser | null) {
+  // ALL hooks MUST be invoked at the top before any conditional return statements
   const cAuth = useClerkAuth();
   const cUser = useClerkUser();
-
   const fallbackFromTimeout = useClerkFallbackActive(cAuth.isLoaded);
-  const fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
 
   const user = useMemo(() => {
     if (!cUser.user) return null;
@@ -195,6 +194,8 @@ function useClerkAuthHook(localUser: LocalUser | null) {
       });
     }
   }, [user?.id, user?.email, user?.name, user?.role, user?.avatarUrl]);
+
+  const fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
 
   if (!fallbackActive && cAuth) {
     return {
