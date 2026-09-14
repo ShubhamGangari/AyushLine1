@@ -70,7 +70,9 @@ export const LocalUserButton = () => {
               alt={currentUser.name}
               className="w-full h-full object-cover"
               onError={(e) => {
-                (e.target as HTMLImageElement).style.display = 'none';
+                const target = e.currentTarget;
+                target.onerror = null;
+                target.style.display = 'none';
               }}
             />
           ) : (

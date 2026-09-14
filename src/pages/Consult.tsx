@@ -266,7 +266,9 @@ const Consult = () => {
                     alt={matchedDoctor.name}
                     className="w-24 h-24 rounded-2xl object-cover border-2 border-ayush-gold flex-shrink-0 shadow-md"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(matchedDoctor.name)}&background=2d5a27&color=fff&size=150`;
+                      const target = e.currentTarget;
+                      target.onerror = null;
+                      target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(matchedDoctor.name)}&background=2d5a27&color=fff&size=150`;
                     }}
                   />
                   <div className="flex-1 text-center sm:text-left space-y-2">
@@ -336,7 +338,9 @@ const Consult = () => {
                         alt={doctor.name}
                         className="w-16 h-16 rounded-2xl object-cover border-2 border-ayush-gold/30 flex-shrink-0 shadow-sm"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&background=2d5a27&color=fff&size=100`;
+                          const target = e.currentTarget;
+                          target.onerror = null;
+                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&background=2d5a27&color=fff&size=100`;
                         }}
                       />
                       <div className="flex-1 min-w-0">

@@ -286,7 +286,9 @@ const DoctorProfile: React.FC = () => {
                 alt={doctor.name}
                 className="w-36 h-36 rounded-3xl object-cover border-4 border-ayush-gold shadow-xl"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&background=2d5a27&color=fff&size=200`;
+                  const target = e.currentTarget;
+                  target.onerror = null;
+                  target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doctor.name)}&background=2d5a27&color=fff&size=200`;
                 }}
               />
               <span className={`absolute -bottom-2 -right-2 px-3 py-1 rounded-full text-xs font-bold ${systemColor}`}>
@@ -554,7 +556,9 @@ const DoctorProfile: React.FC = () => {
                         alt={doc.name}
                         className="w-12 h-12 rounded-full object-cover border-2 border-ayush-forest/20"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&background=2d5a27&color=fff`;
+                          const target = e.currentTarget;
+                          target.onerror = null;
+                          target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(doc.name)}&background=2d5a27&color=fff`;
                         }}
                       />
                       <div className="flex-1 min-w-0">
