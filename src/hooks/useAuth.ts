@@ -12,8 +12,6 @@ import { createOrUpsertProfile } from '../lib/api/profiles';
 import { LocalUserButton } from '../components/auth/LocalUserButton';
 
 // ─── Password Hashing (SubtleCrypto / SHA-256) ───────────────────────────────
-// Passwords are NEVER stored in plain-text. We use the browser-native
-// SubtleCrypto API (SHA-256) to produce a deterministic, irreversible hash.
 async function hashPassword(password: string): Promise<string> {
   const encoder = new TextEncoder();
   const data = encoder.encode(password + 'ayushline_salt_v1');
@@ -23,7 +21,6 @@ async function hashPassword(password: string): Promise<string> {
 }
 
 async function verifyPassword(inputPassword: string, storedHash: string): Promise<boolean> {
-  // Support plain-text legacy passwords during migration (will be hashed on next login)
   if (storedHash.length !== 64) {
     return inputPassword === storedHash;
   }
@@ -57,11 +54,6 @@ const CLERK_LOAD_TIMEOUT_MS = 8000;
 
 let activeLocalAuthMode = false;
 
-/**
- * Returns `true` when the local auth fallback should be used:
- * - Clerk is not configured at all, OR
- * - Clerk is configured but failed to become ready within the timeout.
- */
 function useClerkFallbackActive(clerkIsLoaded: boolean): boolean {
   const [timedOut, setTimedOut] = useState<boolean>(false);
 
@@ -86,16 +78,10 @@ function useClerkFallbackActive(clerkIsLoaded: boolean): boolean {
   return !isClerkConfigured || (timedOut && !clerkIsLoaded);
 }
 
-/**
- * True when the app is currently running on the local auth mode (either Clerk is
- * not configured, or its bootstrap timed out). Read during render – components
- * re-render when the underlying auth state flips.
- */
 export function isLocalAuthMode(): boolean {
   return activeLocalAuthMode || !isClerkConfigured;
 }
 
-// Helper to get local registered users
 export function getLocalUsers(): LocalUser[] {
   try {
     const raw = localStorage.getItem(STORAGE_USERS_KEY);
@@ -106,7 +92,6 @@ export function getLocalUsers(): LocalUser[] {
   }
 }
 
-// Helper to save local registered user
 export function saveLocalUser(user: LocalUser) {
   const users = getLocalUsers();
   const existingIdx = users.findIndex((u) => u.email.toLowerCase() === user.email.toLowerCase());
@@ -117,7 +102,6 @@ export function saveLocalUser(user: LocalUser) {
   }
   localStorage.setItem(STORAGE_USERS_KEY, JSON.stringify(users));
 
-  // Sync active session if it matches the user
   const currentSession = getLocalSession();
   if (currentSession && (currentSession.id === user.id || currentSession.email.toLowerCase() === user.email.toLowerCase())) {
     const updatedSession = { ...currentSession, ...user };
@@ -126,7 +110,6 @@ export function saveLocalUser(user: LocalUser) {
   }
 }
 
-// Helper to get active local session
 export function getLocalSession(): LocalUser | null {
   try {
     const raw = localStorage.getItem(STORAGE_SESSION_KEY);
@@ -137,7 +120,6 @@ export function getLocalSession(): LocalUser | null {
   }
 }
 
-// Helper to set active local session
 export function setLocalSession(user: LocalUser | null) {
   if (user) {
     localStorage.setItem(STORAGE_SESSION_KEY, JSON.stringify(user));
@@ -147,7 +129,6 @@ export function setLocalSession(user: LocalUser | null) {
   window.dispatchEvent(new CustomEvent('ayush_auth_change'));
 }
 
-// Global state listener hook for local auth
 function useLocalAuthState() {
   const [currentUser, setCurrentUser] = useState<LocalUser | null>(() => getLocalSession());
 
@@ -166,95 +147,67 @@ function useLocalAuthState() {
   return currentUser;
 }
 
-export function useAuth() {
-  const localUser = useLocalAuthState();
+// ─── Clerk Authentication Hook (100% Rules of Hooks compliant) ───────────────
+function useClerkAuthHook(localUser: LocalUser | null) {
+  const cAuth = useClerkAuth();
+  const cUser = useClerkUser();
 
-  let clerkAuth: ReturnType<typeof useClerkAuth> | null = null;
-  let clerkUser: {
-    id: string;
-    email: string;
-    name: string;
-    avatarUrl: string;
-    role: string;
-  } | null = null;
-  let fallbackActive = true;
+  const fallbackFromTimeout = useClerkFallbackActive(cAuth.isLoaded);
+  const fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
 
-  if (isClerkConfigured) {
-    try {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const cAuth = useClerkAuth();
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const cUser = useClerkUser();
-
-      clerkAuth = cAuth;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const fallbackFromTimeout = useClerkFallbackActive(cAuth.isLoaded);
-      // When Clerk is configured and ready it is the source of truth, so a
-      // leftover local demo session must not hijack the real Clerk identity.
-      fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
-
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const user = useMemo(() => {
-        if (!cUser.user) return null;
-        return {
-          id: cUser.user.id,
-          email: cUser.user.primaryEmailAddress?.emailAddress || '',
-          name: cUser.user.fullName || cUser.user.firstName || 'User',
-          avatarUrl: cUser.user.imageUrl,
-          role:
-            (cUser.user.publicMetadata?.role as any) ||
-            (cUser.user.unsafeMetadata?.role as any) ||
-            'user',
-        };
-      }, [
-        cUser.user?.id,
-        cUser.user?.primaryEmailAddress?.emailAddress,
-        cUser.user?.fullName,
-        cUser.user?.firstName,
-        cUser.user?.imageUrl,
-        cUser.user?.publicMetadata?.role,
-        cUser.user?.unsafeMetadata?.role,
-      ]);
-      clerkUser = user;
-
-      // Automatically sync signed-in Clerk/Google user into registered users list & profiles
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEffect(() => {
-        if (user && user.id) {
-          saveLocalUser({
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            role: (user.role as any) || 'user',
-            avatarUrl: user.avatarUrl,
-            createdAt: new Date().toISOString(),
-          });
-          void createOrUpsertProfile(user.id, {
-            name: user.name,
-            email: user.email,
-            role: (user.role as any) || 'user',
-            avatar_url: user.avatarUrl,
-          });
-        }
-      }, [user?.id, user?.email, user?.name, user?.role, user?.avatarUrl]);
-    } catch {
-      // Clerk provider unavailable – fall through to local mode
-    }
-  }
-
-  if (isClerkConfigured && !fallbackActive && clerkAuth) {
+  const user = useMemo(() => {
+    if (!cUser.user) return null;
     return {
-      isLoaded: clerkAuth.isLoaded,
-      isSignedIn: clerkAuth.isSignedIn,
-      userId: clerkAuth.userId,
-      sessionId: clerkAuth.sessionId,
-      user: clerkUser,
-      getToken: clerkAuth.getToken,
-      signOut: clerkAuth.signOut,
+      id: cUser.user.id,
+      email: cUser.user.primaryEmailAddress?.emailAddress || '',
+      name: cUser.user.fullName || cUser.user.firstName || 'User',
+      avatarUrl: cUser.user.imageUrl,
+      role:
+        (cUser.user.publicMetadata?.role as any) ||
+        (cUser.user.unsafeMetadata?.role as any) ||
+        'user',
+    };
+  }, [
+    cUser.user?.id,
+    cUser.user?.primaryEmailAddress?.emailAddress,
+    cUser.user?.fullName,
+    cUser.user?.firstName,
+    cUser.user?.imageUrl,
+    cUser.user?.publicMetadata?.role,
+    cUser.user?.unsafeMetadata?.role,
+  ]);
+
+  useEffect(() => {
+    if (user && user.id) {
+      saveLocalUser({
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: (user.role as any) || 'user',
+        avatarUrl: user.avatarUrl,
+        createdAt: new Date().toISOString(),
+      });
+      void createOrUpsertProfile(user.id, {
+        name: user.name,
+        email: user.email,
+        role: (user.role as any) || 'user',
+        avatar_url: user.avatarUrl,
+      });
+    }
+  }, [user?.id, user?.email, user?.name, user?.role, user?.avatarUrl]);
+
+  if (!fallbackActive && cAuth) {
+    return {
+      isLoaded: cAuth.isLoaded,
+      isSignedIn: cAuth.isSignedIn,
+      userId: cAuth.userId,
+      sessionId: cAuth.sessionId,
+      user: user,
+      getToken: cAuth.getToken,
+      signOut: cAuth.signOut,
     };
   }
 
-  // Local (fallback) mode – never blocks on loading
   return {
     isLoaded: true,
     isSignedIn: Boolean(localUser),
@@ -268,29 +221,41 @@ export function useAuth() {
   };
 }
 
-export function useSignIn() {
+function useLocalAuthHook(localUser: LocalUser | null) {
+  return {
+    isLoaded: true,
+    isSignedIn: Boolean(localUser),
+    userId: localUser?.id || null,
+    sessionId: localUser ? `sess_${localUser.id}` : null,
+    user: localUser,
+    getToken: async () => null,
+    signOut: async () => {
+      setLocalSession(null);
+    },
+  };
+}
+
+export function useAuth() {
   const localUser = useLocalAuthState();
-
-  let clerkSignIn: ReturnType<typeof useClerkSignIn> | null = null;
-  let fallbackActive = true;
-
   if (isClerkConfigured) {
-    try {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const csi = useClerkSignIn();
-      clerkSignIn = csi;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const fallbackFromTimeout = useClerkFallbackActive(csi.isLoaded);
-      fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
-    } catch {
-      // Clerk provider unavailable – fall through to local mode
-    }
+    return useClerkAuthHook(localUser);
   }
+  return useLocalAuthHook(localUser);
+}
 
-  if (isClerkConfigured && !fallbackActive && clerkSignIn) {
-    return clerkSignIn;
+// ─── Clerk SignIn Hook ────────────────────────────────────────────────────────
+function useClerkSignInHook(localUser: LocalUser | null) {
+  const csi = useClerkSignIn();
+  const fallbackFromTimeout = useClerkFallbackActive(csi.isLoaded);
+  const fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
+
+  if (!fallbackActive && csi) {
+    return csi;
   }
+  return useLocalSignInHook(localUser);
+}
 
+function useLocalSignInHook(localUser: LocalUser | null) {
   return {
     isLoaded: true,
     signIn: {
@@ -329,7 +294,6 @@ export function useSignIn() {
               ],
             };
           }
-          // Migrate plain-text passwords to hashed on successful login
           if (target.password.length !== 64) {
             const hashed = await hashPassword(pwd);
             const updatedTarget = { ...target, password: hashed };
@@ -345,9 +309,7 @@ export function useSignIn() {
           createdSessionId: `sess_${target.id}`,
         };
       },
-      authenticateWithRedirect: async () => {
-        // Google OAuth requires Clerk – not available in local fallback mode.
-      },
+      authenticateWithRedirect: async () => {},
       attemptFirstFactor: async ({ code, password }: { code?: string; password?: string }) => {
         if (!code || code.trim().length < 4) {
           throw { errors: [{ message: 'Please enter a valid verification code.' }] };
@@ -361,62 +323,32 @@ export function useSignIn() {
     },
     setActive: async ({ session }: { session?: string | null }) => {
       if (session && !localUser) {
-        // keep active
+        // active session
       }
     },
   };
 }
 
-/**
- * Dedicated Google OAuth flow.
- *
- * Unlike `useSignUp`/`useSignIn` (which may fall back to the local demo mode
- * when Clerk loads slowly), this hook always talks to the real Clerk OAuth
- * provider whenever Clerk is configured. This guarantees the "Continue with
- * Google" button opens the actual Google sign-in instead of a demo form.
- */
-export function useGoogleOAuth() {
-  // The Clerk *instance* (useClerk) keeps a stable object identity across
-  // renders, so reading its live getters inside the async polling loop below is
-  // always up to date. The useSignUp/useSignIn hook objects are recreated on
-  // every render and would go stale inside an async closure, and window.Clerk
-  // is only set when ClerkJS is loaded via the CDN script — so we treat the
-  // instance as the primary source and keep both others as fallbacks.
-  let clerkInstance: ReturnType<typeof useClerk> | null = null;
-  let clerkSignUp: ReturnType<typeof useClerkSignUp> | null = null;
-  let clerkSignIn: ReturnType<typeof useClerkSignIn> | null = null;
-
+export function useSignIn() {
+  const localUser = useLocalAuthState();
   if (isClerkConfigured) {
-    try {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      clerkInstance = useClerk();
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      clerkSignUp = useClerkSignUp();
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      clerkSignIn = useClerkSignIn();
-    } catch {
-      // Clerk provider unavailable – Google OAuth will report unavailable
-    }
+    return useClerkSignInHook(localUser);
   }
+  return useLocalSignInHook(localUser);
+}
 
-  /**
-   * Waits for the Clerk SDK to finish loading in the browser. Clerk loads
-   * asynchronously after the page mounts, so a user can click the Google button
-   * before it is ready. We wait up to `timeoutMs` and then proceed — this avoids
-   * the misleading "still initializing, try again" dead-end.
-   *
-   * Note: on a Clerk instance, `loaded` is a BOOLEAN getter (status ===
-   * "ready"), NOT a method — read it as a flag, never call it as a function.
-   */
+// ─── Google OAuth Hook ────────────────────────────────────────────────────────
+function useClerkGoogleOAuthHook() {
+  const clerkInstance = useClerk();
+  const clerkSignUp = useClerkSignUp();
+  const clerkSignIn = useClerkSignIn();
+
   const waitForClerkReady = async (timeoutMs = 8000): Promise<boolean> => {
     if (!isClerkConfigured) return false;
     const inst = clerkInstance as any;
     const start = Date.now();
     while (Date.now() - start < timeoutMs) {
       const clerkGlobal = (window as any).Clerk;
-      // Live sources only: the stable instance (useClerk) and the global
-      // window.Clerk. The hook objects are omitted on purpose — they are
-      // recreated each render and would go stale inside this async closure.
       const isReady =
         inst?.loaded === true ||
         (typeof inst?.isLoaded === 'function' && inst.isLoaded()) ||
@@ -502,33 +434,39 @@ export function useGoogleOAuth() {
   return { signUpWithGoogle, signInWithGoogle };
 }
 
-// Remembers the most recently created local account so the OTP-verification step
-// completes against the same user id (keeps profile & session consistent).
+function useLocalGoogleOAuthHook() {
+  return {
+    signUpWithGoogle: async () => {
+      throw new Error('Google Sign-In is unavailable in demo mode without Clerk credentials.');
+    },
+    signInWithGoogle: async () => {
+      throw new Error('Google Sign-In is unavailable in demo mode without Clerk credentials.');
+    },
+  };
+}
+
+export function useGoogleOAuth() {
+  if (isClerkConfigured) {
+    return useClerkGoogleOAuthHook();
+  }
+  return useLocalGoogleOAuthHook();
+}
+
+// ─── Clerk SignUp Hook ────────────────────────────────────────────────────────
 let lastCreatedLocalUser: LocalUser | null = null;
 
-export function useSignUp() {
-  const localUser = useLocalAuthState();
+function useClerkSignUpHook(localUser: LocalUser | null) {
+  const csu = useClerkSignUp();
+  const fallbackFromTimeout = useClerkFallbackActive(csu.isLoaded);
+  const fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
 
-  let clerkSignUp: ReturnType<typeof useClerkSignUp> | null = null;
-  let fallbackActive = true;
-
-  if (isClerkConfigured) {
-    try {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const csu = useClerkSignUp();
-      clerkSignUp = csu;
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      const fallbackFromTimeout = useClerkFallbackActive(csu.isLoaded);
-      fallbackActive = isLocalAuthMode() || fallbackFromTimeout;
-    } catch {
-      // Clerk provider unavailable – fall through to local mode
-    }
+  if (!fallbackActive && csu) {
+    return csu;
   }
+  return useLocalSignUpHook(localUser);
+}
 
-  if (isClerkConfigured && !fallbackActive && clerkSignUp) {
-    return clerkSignUp;
-  }
-
+function useLocalSignUpHook(localUser: LocalUser | null) {
   return {
     isLoaded: true,
     signUp: {
@@ -576,7 +514,6 @@ export function useSignUp() {
           };
         }
 
-        // Hash the password before storing — NEVER persist plain-text
         const hashedPwd = await hashPassword(pwd);
 
         const newUser: LocalUser = {
@@ -593,7 +530,6 @@ export function useSignUp() {
         saveLocalUser(newUser);
         setLocalSession(newUser);
 
-        // Sync with profile storage
         void createOrUpsertProfile(newUser.id, {
           name: newUser.name,
           email: newUser.email,
@@ -606,15 +542,13 @@ export function useSignUp() {
           createdUserId: newUser.id,
         };
       },
-      prepareEmailAddressVerification: async ({ strategy }: { strategy?: string } = {}) => {
+      prepareEmailAddressVerification: async () => {
         return { status: 'unverified' };
       },
       attemptEmailAddressVerification: async ({ code }: { code: string }) => {
         if (!code || code.trim().length < 4) {
           throw { errors: [{ message: 'Please enter a valid verification code.' }] };
         }
-        // Complete against the account created in `create()` so the profile is
-        // saved under the correct user id and the session stays consistent.
         if (lastCreatedLocalUser) {
           return {
             status: 'complete',
@@ -628,9 +562,7 @@ export function useSignUp() {
           createdUserId: `usr_${Date.now()}`,
         };
       },
-      authenticateWithRedirect: async () => {
-        // Google OAuth requires Clerk – not available in local fallback mode.
-      },
+      authenticateWithRedirect: async () => {},
     },
     setActive: async ({ session }: { session?: string | null }) => {
       if (session && !localUser) {
@@ -638,6 +570,14 @@ export function useSignUp() {
       }
     },
   };
+}
+
+export function useSignUp() {
+  const localUser = useLocalAuthState();
+  if (isClerkConfigured) {
+    return useClerkSignUpHook(localUser);
+  }
+  return useLocalSignUpHook(localUser);
 }
 
 export const UserButton = LocalUserButton;

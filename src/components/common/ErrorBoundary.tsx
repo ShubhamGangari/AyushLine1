@@ -69,24 +69,21 @@ export class ErrorBoundary extends Component<Props, State> {
               We encountered an unexpected technical issue. Don't worry — your health data and session remain secure.
             </p>
 
-            {/* Show error reference ID in production (helpful for support), full message in dev */}
-            {IS_PROD ? (
-              this.state.errorId && (
-                <p className="text-xs font-mono text-ayush-charcoal/40 mb-6 bg-ayush-sage/30 rounded-lg px-3 py-2">
-                  Error reference: <span className="font-bold">{this.state.errorId}</span>
-                </p>
-              )
-            ) : (
-              this.state.error && (
-                <details className="mb-6 text-left">
-                  <summary className="text-xs font-ui text-ayush-charcoal/50 cursor-pointer mb-1">
-                    Developer info
-                  </summary>
-                  <pre className="text-xs text-red-600 bg-red-50 rounded-lg p-3 overflow-auto max-h-32 whitespace-pre-wrap">
-                    {this.state.error.message}
-                  </pre>
-                </details>
-              )
+            {this.state.errorId && (
+              <p className="text-xs font-mono text-ayush-charcoal/40 mb-3 bg-ayush-sage/30 rounded-lg px-3 py-2">
+                Error reference: <span className="font-bold">{this.state.errorId}</span>
+              </p>
+            )}
+
+            {this.state.error && (
+              <details className="mb-6 text-left">
+                <summary className="text-xs font-ui text-ayush-charcoal/50 cursor-pointer mb-1">
+                  Developer info
+                </summary>
+                <pre className="text-xs text-red-600 bg-red-50 rounded-lg p-3 overflow-auto max-h-32 whitespace-pre-wrap">
+                  {this.state.error.message}
+                </pre>
+              </details>
             )}
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
