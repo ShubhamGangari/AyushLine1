@@ -62,47 +62,51 @@ const CustomSignUp = ({ onBack, afterSignUpUrl = '/', selectedRole = 'user' }: C
   const { signUp, isLoaded, setActive } = useSignUp();
 
   const saveProfileAndFinish = async (userId: string) => {
-    const profileData: any = {
-      name: name.trim(),
-      email: email.trim(),
-      role,
-      system,
-    };
-    if (role === 'student') {
-      profileData.college = college;
-      profileData.qualification = degree;
-      profileData.bio = bio;
-    } else if (role === 'doctor') {
-      profileData.specialization = specialization;
-      profileData.qualification = qualification;
-      profileData.experience_years = experienceYears ? parseInt(experienceYears, 10) : 0;
-      profileData.college = college;
-      profileData.address = clinicName;
-      profileData.city = city;
-      profileData.whatsapp = whatsapp;
-      profileData.bio = bio;
-
-      await registerDoctor({
-        user_id: userId,
+    try {
+      const profileData: any = {
         name: name.trim(),
         email: email.trim(),
-        specialization,
-        qualification,
-        experience_years: experienceYears ? parseInt(experienceYears, 10) : 0,
+        role,
         system,
-        clinic_name: clinicName,
-        city,
-        whatsapp,
-        bio,
-        status: 'pending',
-      });
-    } else if (role === 'org') {
-      profileData.address = clinicName;
-      profileData.city = city;
-      profileData.whatsapp = whatsapp;
-      profileData.bio = bio;
+      };
+      if (role === 'student') {
+        profileData.college = college;
+        profileData.qualification = degree;
+        profileData.bio = bio;
+      } else if (role === 'doctor') {
+        profileData.specialization = specialization;
+        profileData.qualification = qualification;
+        profileData.experience_years = experienceYears ? parseInt(experienceYears, 10) : 0;
+        profileData.college = college;
+        profileData.address = clinicName;
+        profileData.city = city;
+        profileData.whatsapp = whatsapp;
+        profileData.bio = bio;
+
+        await registerDoctor({
+          user_id: userId,
+          name: name.trim(),
+          email: email.trim(),
+          specialization,
+          qualification,
+          experience_years: experienceYears ? parseInt(experienceYears, 10) : 0,
+          system,
+          clinic_name: clinicName,
+          city,
+          whatsapp,
+          bio,
+          status: 'pending',
+        });
+      } else if (role === 'org') {
+        profileData.address = clinicName;
+        profileData.city = city;
+        profileData.whatsapp = whatsapp;
+        profileData.bio = bio;
+      }
+      await createOrUpsertProfile(userId, profileData);
+    } catch (err) {
+      console.warn('[SignUp] Profile sync warning:', err);
     }
-    await createOrUpsertProfile(userId, profileData);
     window.location.href = afterSignUpUrl;
   };
 
