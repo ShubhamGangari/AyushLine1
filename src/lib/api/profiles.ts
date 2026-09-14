@@ -71,6 +71,14 @@ export async function createOrUpsertProfile(
       role: updatedLocal.role,
       avatar_url: updatedLocal.avatar_url,
       bio: updatedLocal.bio,
+      college: updatedLocal.college,
+      specialization: updatedLocal.specialization,
+      qualification: updatedLocal.qualification,
+      experience_years: updatedLocal.experience_years,
+      system: updatedLocal.system,
+      city: updatedLocal.city,
+      address: updatedLocal.address,
+      whatsapp: updatedLocal.whatsapp,
       updated_at: updatedLocal.updated_at,
     });
 
